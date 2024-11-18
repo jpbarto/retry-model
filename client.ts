@@ -1,17 +1,16 @@
 import { Server } from "./server";
 
 export class Client {
-    server: Server,
-    connected: boolean,
+    server: Server;
+    connected: boolean = false;
 
     constructor (server: Server) {
         this.server = server;
-        this.connected = false;
     }
 
     connect () {
         if (! this.connected) {
-            this.server.connect (this.connectHandler);
+            this.server.connect (this.connectHandler.bind (this));
         }
     }
 
