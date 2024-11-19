@@ -1,5 +1,8 @@
 all: clean model.js run
 
+fmt:
+	tsfmt -r
+
 model.js: model.ts
 	tsc
 
