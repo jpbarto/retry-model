@@ -8,8 +8,8 @@ fmt:
 model.js: model.ts
 	tsc
 
-run: model.js
-	node model.js
+run: model.ts
+	npx ts-node --require ./instrumentation.ts model.ts
 
 clean:
 	rm -f *.js

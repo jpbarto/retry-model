@@ -5,6 +5,7 @@ import {
     ConsoleMetricExporter,
     MeterProvider,
 } from "@opentelemetry/sdk-metrics";
+import { OTLPMetricExporter }from '@opentelemetry/exporter-metrics-otlp-proto';
 import { Resource } from '@opentelemetry/resources';
 import { 
     ATTR_SERVICE_NAME, 
@@ -20,7 +21,7 @@ const sdk = new NodeSDK ({
         [ATTR_SERVICE_VERSION]: '0.1',
     }),
     metricReader: new PeriodicExportingMetricReader({
-        exporter: new ConsoleMetricExporter(),
+        exporter: new OTLPMetricExporter(),
     }),
 });
 sdk.start ();
