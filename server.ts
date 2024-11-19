@@ -1,23 +1,36 @@
 export class Server {
-    clients: number = 0;
+    connectedClients: number = 0;
+    connectingClients: number = 0;
+    connectAttempts: number = 0;
     minConnectTime: number;
     maxConnectTime: number;
+    connLimit: number;
 
-    constructor () {
-        this.minConnectTime = 2;
-        this.maxConnectTime = 60;
+    constructor (minConnectTime: number, maxConnectTime: number, connLimit: number) {
+        this.minConnectTime = minConnectTime;
+        this.maxConnectTime = maxConnectTime;
+        this.connLimit = connLimit;
     }
 
-    connect (handler: () => any) {
-        const connectTime = (this.minConnectTime + 
-            (this.maxConnectTime - this.minConnectTime)*Math.random())
-            *1000;
+    connect (handler: (result: boolean) => any) {
+        this.connectAttempts++;
 
-        setTimeout(() => {
-            this.clients++;
-            handler ();
-        }, connectTime);
+        if (this.connectingClients >= this.connLimit) {
+            setTimeout(() => {
+                handler(false);
+            }, 0);
+        }else{
+            const connectTime = (this.minConnectTime + 
+                (this.maxConnectTime - this.minConnectTime)*Math.random())
+                *1000;
 
-        return true;
+            setTimeout(() => {
+                this.connectingClients--;
+                this.connectedClients++;
+                handler (true);
+            }, connectTime);
+
+            this.connectingClients++;
+        }
     }
 }
