@@ -1,9 +1,5 @@
 import { Server } from "./server";
 
-import opentelemetry from '@opentelemetry/api';
-
-const clientMeter = opentelemetry.metrics.getMeter('retry.client', '0.1');
-
 export class Client {
     server: Server;
     connected: boolean = false;
@@ -13,13 +9,12 @@ export class Client {
     retryLimit: number = 0;
     nextRetryAt: number = 0;
     waitForRetry: boolean = false;
-    timeWaiting: any;
+    timeWaiting: number = 0;
 
     constructor(server: Server, retryTime: number, retryLimit: number) {
         this.server = server;
         this.retryBase = retryTime;
         this.retryLimit = retryLimit;
-        this.timeWaiting = clientMeter.createCounter('client.retry.waiting');
     }
 
     connect() {
@@ -48,7 +43,7 @@ export class Client {
                 retryDelay = this.retryLimit;
             }
 
-            this.timeWaiting.add(retryDelay);
+            this.timeWaiting += retryDelay;
 
             this.nextRetryAt = Date.now() + (retryDelay * 1000);
         }

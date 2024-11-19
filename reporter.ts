@@ -20,13 +20,20 @@ export class Reporter {
         }
 
         var retryCount = 0;
+        var waitTimes = new Array<number>();
         for (const client of this.clients) {
             retryCount += client.retryCount;
+            if (client.timeWaiting > 0) {
+                waitTimes.push (client.timeWaiting);
+            }
         }
         console.log('### Report', new Date().toLocaleString());
         console.log(this.clients.length, 'Clients');
         console.log("Connection attempts:", this.server.connectAttempts);
         console.log('Connected clients:', this.server.connectedClients);
+        console.log('Connecting clients:', this.server.connectingClients);
+        console.log('Min wait time:', Math.min(...waitTimes));
+        console.log('Max wait time:', Math.max(...waitTimes));
         console.log("Retries:", retryCount);
     }
 
