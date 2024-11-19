@@ -5,26 +5,26 @@ export class Client {
     connected: boolean = false;
     connecting: boolean = false;
     retryCount: number = 0;
-    retryTime: number = 0;
+    retryBase: number = 0;
+    retryLimit: number = 0;
     nextRetryAt: number = 0;
     waitForRetry: boolean = false;
 
-    constructor(server: Server, retryTime: number) {
+    constructor(server: Server, retryTime: number, retryLimit: number) {
         this.server = server;
-        this.retryTime = retryTime;
+        this.retryBase = retryTime;
+        this.retryLimit = retryLimit;
     }
 
     connect() {
-        if (!this.connected) {
-            if (!this.connecting) {
-                if (!this.waitForRetry) {
-                    this.connecting = true;
-                    this.server.connect(this.connectHandler.bind(this));
-                } else {
-                    if (Date.now() >= this.nextRetryAt) {
-                        this.retryCount++;
-                        this.waitForRetry = false;
-                    }
+        if (!this.connected && !this.connecting) {
+            if (!this.waitForRetry) {
+                this.connecting = true;
+                this.server.connect(this.connectHandler.bind(this));
+            } else {
+                if (Date.now() >= this.nextRetryAt) {
+                    this.retryCount++;
+                    this.waitForRetry = false;
                 }
             }
         }
@@ -36,7 +36,13 @@ export class Client {
             this.connected = true;
         } else {
             this.waitForRetry = true;
-            this.nextRetryAt = Date.now() + (this.retryTime * 1000);
+
+            var retryDelay = Math.pow(this.retryBase, this.retryCount);
+            if (retryDelay > this.retryLimit) {
+                retryDelay = this.retryLimit;
+            }
+
+            this.nextRetryAt = Date.now() + (retryDelay * 1000);
         }
     }
 }
