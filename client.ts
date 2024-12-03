@@ -1,9 +1,20 @@
 import { Server } from "./server";
-import opentelemetry from '@opentelemetry/api';
+import { trace, Span, metrics } from '@opentelemetry/api';
 
-const clientMeter = opentelemetry.metrics.getMeter('retry-model.client', '0.1');
+const clientMeter = metrics.getMeter('retry-model.client', '0.1');
+const tracer = trace.getTracer(
+    'retry_model.client',
+    '0.1'
+);
+
+function uuidv4() {
+    return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
+        (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
+    );
+}
 
 export class Client {
+    clientId: string;
     server: Server;
     connected: boolean = false;
     connecting: boolean = false;
@@ -14,44 +25,53 @@ export class Client {
     waitForRetry: boolean = false;
     timeWaiting: number = 0;
     retryTimes: any;
+    retryCounter: any;
 
     constructor(server: Server, retryTime: number, retryLimit: number) {
+        this.clientId = uuidv4();
         this.server = server;
         this.retryBase = retryTime;
         this.retryLimit = retryLimit;
-        this.retryTimes = clientMeter.createHistogram ('client.retry-delay');
+        this.retryTimes = clientMeter.createHistogram('retry-model.client.retry-delay');
+        this.retryCounter = clientMeter.createCounter('retry-model.client.retry-count');
     }
 
     connect() {
-        if (!this.connected && !this.connecting) {
-            if (!this.waitForRetry) {
-                this.connecting = true;
-                this.server.connect(this.connectHandler.bind(this));
-            } else {
-                if (Date.now() >= this.nextRetryAt) {
-                    this.retryCount++;
-                    this.waitForRetry = false;
+        tracer.startActiveSpan('connect', (span: Span) => {
+            if (!this.connected && !this.connecting) {
+                if (!this.waitForRetry) {
+                    this.connecting = true;
+                    this.server.connect(this.connectHandler.bind(this));
+                } else {
+                    if (Date.now() >= this.nextRetryAt) {
+                        this.retryCount++;
+                        this.retryCounter.add(1, { clientId: this.clientId });
+                        this.waitForRetry = false;
+                    }
                 }
             }
-        }
+        });
     }
 
     connectHandler(result: boolean) {
         this.connecting = false;
-        if (result) {
-            this.connected = true;
-        } else {
-            this.waitForRetry = true;
 
-            var retryDelay = Math.pow(this.retryBase, this.retryCount);
-            if (retryDelay > this.retryLimit) {
-                retryDelay = this.retryLimit;
+        tracer.startActiveSpan('connectHandler', (span: Span) => {
+            if (result) {
+                this.connected = true;
+            } else {
+                this.waitForRetry = true;
+
+                var retryDelay = Math.pow(this.retryBase, this.retryCount);
+                if (retryDelay > this.retryLimit) {
+                    retryDelay = this.retryLimit;
+                }
+
+                this.timeWaiting += retryDelay;
+
+                this.nextRetryAt = Date.now() + (retryDelay * 1000);
+                this.retryTimes.record(retryDelay, { clientId: this.clientId });
             }
-
-            this.timeWaiting += retryDelay;
-
-            this.nextRetryAt = Date.now() + (retryDelay * 1000);
-            this.retryTimes.record (retryDelay);
-        }
+        });
     }
 }

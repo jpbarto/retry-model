@@ -9,7 +9,7 @@ model.js: model.ts
 	tsc
 
 run: 
-	npx ts-node --require ./instrumentation.ts model.ts
+	OTEL_METRIC_EXPORT_INTERVAL=5000 && npx ts-node --require ./instrumentation.ts model.ts
 
 clean:
 	rm -f *.js

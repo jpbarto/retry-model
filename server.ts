@@ -1,6 +1,6 @@
 import opentelemetry, { UpDownCounter } from '@opentelemetry/api';
 
-const serverMeter = opentelemetry.metrics.getMeter('retry.client', '0.1');
+const serverMeter = opentelemetry.metrics.getMeter('retry-model.server', '0.1');
 
 function randomNormal (min: number, max: number, skew: number) {
     let u = 0, v = 0;
@@ -28,6 +28,7 @@ export class Server {
     skewConnectTime: number;
     connLimit: number;
     connectingUDCounter: any;
+    connectTimes: any;
 
     constructor(minConnectTime: number, maxConnectTime: number, skewConnectTime: number, connLimit: number) {
         this.minConnectTime = minConnectTime;
@@ -35,6 +36,7 @@ export class Server {
         this.skewConnectTime = skewConnectTime;
         this.connLimit = connLimit;
         this.connectingUDCounter = serverMeter.createUpDownCounter('retry-model.server.connecting');
+        this.connectTimes = serverMeter.createHistogram('retry-model.server.connect-times');
     }
 
     connect(handler: (result: boolean) => any) {
@@ -50,6 +52,7 @@ export class Server {
             //     * 1000;
 
             const connectTime = randomNormal (this.minConnectTime, this.maxConnectTime, this.skewConnectTime) * 1000;
+            this.connectTimes.record(connectTime);
 
             setTimeout(() => {
                 this.connectingClients--;
