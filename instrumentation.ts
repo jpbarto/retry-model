@@ -33,7 +33,8 @@ const sdk = new NodeSDK({
         exporter: new OTLPMetricExporter(),
     }),
     traceExporter: new OTLPTraceExporter(),
-    instrumentations: [getNodeAutoInstrumentations(), new BunyanInstrumentation ()],
+    // instrumentations: [getNodeAutoInstrumentations(), new BunyanInstrumentation ()],
+    instrumentations: [new BunyanInstrumentation ()],
 });
 sdk.start();
 
