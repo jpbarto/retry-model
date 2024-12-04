@@ -1,6 +1,7 @@
-import opentelemetry, { UpDownCounter } from '@opentelemetry/api';
+import { metrics, trace, UpDownCounter } from '@opentelemetry/api';
 
-const serverMeter = opentelemetry.metrics.getMeter('retry-model.server', '0.1');
+const serverMeter = metrics.getMeter('retry-model.server', '0.1');
+const tracer = trace.getTracer ( 'retry-model.model', '0.1');
 
 function randomNormal (min: number, max: number, skew: number) {
     let u = 0, v = 0;

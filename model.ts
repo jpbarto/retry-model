@@ -2,8 +2,9 @@ import { Server } from "./server";
 import { Client } from "./client";
 import { Reporter } from "./reporter";
 import opentelemetry from '@opentelemetry/api';
+import bunyan from 'bunyan';
 
-const CLIENT_COUNT = 400;   // number of clients to simulate
+const CLIENT_COUNT = 100;   // number of clients to simulate
 const MIN_CONN_TIME = 19.57;   // min time it takes a client to connect (in sec)
 const MAX_CONN_TIME = 120.61;   // max time it takes a client to connect (in sec)
 const SKEW_CONN_TIME = 2.25;   // skew for on connect time distribution
@@ -13,9 +14,13 @@ const RETRY_LIMIT = 20;     // max time to wait before retrying to connect
 const REPORT_INTERVAL = 5;  // how often to report metrics
 
 const trace = opentelemetry.trace.getTracer (
-    'retry.model',
+    'retry-model.model',
     '0.1'
 );
+const logger = bunyan.createLogger ({name: 'retry-model.model'});
+
+logger.info("Model starting up...");
+logger.info("Environment "+ process.env.OTEL_EXPORTER_OTLP_ENDPOINT +" "+ process.env.OTEL_EXPORTER_OTLP_PROTOCOL);
 
 const server = new Server(MIN_CONN_TIME, MAX_CONN_TIME, SKEW_CONN_TIME, CONN_LIMIT);
 const clients = new Array<Client>();

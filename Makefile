@@ -8,8 +8,8 @@ fmt:
 model.js: model.ts
 	tsc
 
-run: 
-	OTEL_METRIC_EXPORT_INTERVAL=5000 && npx ts-node --require ./instrumentation.ts model.ts
+run:
+	npx ts-node --require @opentelemetry/auto-instrumentations-node/register  --require ./instrumentation.ts model.ts
 
 clean:
 	rm -f *.js
