@@ -4,7 +4,7 @@ import bunyan from 'bunyan';
 
 const clientMeter = metrics.getMeter('retry-model.client', '0.1');
 const tracer = trace.getTracer('retry-model.client', '0.1');
-const logger = bunyan.createLogger ({name: 'retry-model.client'});
+const logger = bunyan.createLogger({ name: 'retry-model.client' });
 
 function uuidv4() {
     return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
@@ -36,29 +36,32 @@ export class Client {
     }
 
     connect() {
-        tracer.startActiveSpan('connect', (span: Span) => {
-            if (!this.connected && !this.connecting) {
-                if (!this.waitForRetry) {
+        if (!this.connected && !this.connecting) {
+            if (!this.waitForRetry) {
+                tracer.startActiveSpan('connect', (span: Span) => {
+                    span.setAttribute ('client-id', this.clientId);
+                    span.setAttribute ('retry-count', this.retryCount);
                     this.connecting = true;
                     this.server.connect(this.connectHandler.bind(this));
-                    logger.info ('Client '+ this.clientId +' attempting to connect to server...');
-                } else {
-                    if (Date.now() >= this.nextRetryAt) {
-                        this.retryCount++;
-                        this.retryCounter.add(1, { clientId: this.clientId });
-                        this.waitForRetry = false;
-                    }
+                    logger.info({clientId: this.clientId}, 'Client ' + this.clientId + ' attempting to connect to server...');
+                    span.end();
+                });
+            } else {
+                if (Date.now() >= this.nextRetryAt) {
+                    this.retryCount++;
+                    this.retryCounter.add(1, { clientId: this.clientId });
+                    this.waitForRetry = false;
                 }
             }
-
-            span.end();
-        });
+        }
     }
 
     connectHandler(result: boolean) {
         this.connecting = false;
 
         tracer.startActiveSpan('connectHandler', (span: Span) => {
+            span.setAttribute ('client-id', this.clientId);
+            span.setAttribute ('connect-result', result);
             if (result) {
                 this.connected = true;
             } else {
@@ -73,8 +76,10 @@ export class Client {
 
                 this.nextRetryAt = Date.now() + (retryDelay * 1000);
                 this.retryTimes.record(retryDelay, { clientId: this.clientId });
+                span.setAttribute ('retry-time', retryDelay);
+                logger.info ({clientId: this.clientId}, "Connect request denied, will try again in "+ retryDelay +" sec");
             }
-            span.end ();
+            span.end();
         });
     }
 }
