@@ -4,7 +4,7 @@ import { Reporter } from "./reporter";
 import opentelemetry from '@opentelemetry/api';
 import bunyan from 'bunyan';
 
-const CLIENT_COUNT = 100;   // number of clients to simulate
+const CLIENT_COUNT = 400;   // number of clients to simulate
 const MIN_CONN_TIME = 19.57;   // min time it takes a client to connect (in sec)
 const MAX_CONN_TIME = 120.61;   // max time it takes a client to connect (in sec)
 const SKEW_CONN_TIME = 2.25;   // skew for on connect time distribution

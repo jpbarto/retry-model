@@ -32,6 +32,7 @@ export class Server {
     connLimit: number;
     connectingUDCounter: any;
     connectTimes: any;
+    connectedCount: any;
 
     constructor(minConnectTime: number, maxConnectTime: number, skewConnectTime: number, connLimit: number) {
         this.minConnectTime = minConnectTime;
@@ -40,6 +41,7 @@ export class Server {
         this.connLimit = connLimit;
         this.connectingUDCounter = serverMeter.createUpDownCounter('retry-model.server.connecting');
         this.connectTimes = serverMeter.createHistogram('retry-model.server.connect-times');
+        this.connectedCount = serverMeter.createCounter('retry-model.server.connected-users');
 
         logger.info ('Server created with configuration '+ {
             minConnectTime: minConnectTime,
@@ -72,6 +74,7 @@ export class Server {
                 setTimeout(() => {
                     this.connectingClients--;
                     this.connectingUDCounter.add(-1);
+                    this.connectedCount.add(1);
                     this.connectedClients++;
                     handler(true);
                 }, connectTime);
