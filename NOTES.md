@@ -39,6 +39,24 @@ Target value: 90 days
 
 Target value: 30 seconds
 
+**Mean time to Diagnose (MTTDi)**
+Time to determine what is causing the impact
+
+**Mean time to Restore**
+Restoration of service to normal levels
+
+**Mean time to Resolve**
+Resolution of condition which is causing impact
+
+**Mean time to Respond**
+Time for operators to get engaged
+
+**Mean time to Repair**
+Time for completion of changes needed to prevent reoccurrnece
+
+**Change failure rate**
+Frequency % of changes which require rollback or otherwise cause unexpected behavior
+
 ## Measurements by Category
 | Anticipate | Detect | Respond | Learn |
 |------------|--------|---------|-------|
