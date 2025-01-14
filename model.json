@@ -1,0 +1,1122 @@
+[
+  {
+    "Activity": "Requirements Analysis",
+    "ADType": "RA-AN-R-RMSD",
+    "Description": "How comprehensive is your documentation of dependencies?",
+    "Level 1": "Infrastructure dependencies mapped",
+    "Level 2": "Services dependencies mapped",
+    "Level 3": "People/Process dependencies mapped",
+    "Comments / Notes": "The more you understand about your dependencies the better you will be able to anticipate failure scenarios.",
+    "References": "Understanding application dependencies and anticipating failure scenarios on AWS involves several steps:\n\n1. Map Dependencies: Identify all the components your application relies on to function correctly. These could be AWS services, external APIs, microservices, libraries, etc. Document these dependencies for reference.\n2. Understand the Impact of Each Dependency: Determine how each dependency affects your application. What happens if a dependency fails or becomes slow? Understanding this will help you anticipate potential failure scenarios.\n3. Monitor Dependencies: Implement monitoring tools to keep track of the health and performance of your dependencies. This can help you detect issues early and respond quickly.\n4. Test Failure Scenarios: Regularly test how your application behaves when a dependency fails. This could involve chaos engineering or fault injection testing. The goal is to ensure your application can handle failures gracefully.\n5. Implement Redundancies and Fallbacks: Where possible, have backup options for your dependencies. For example, if you rely on an external API, you might have a fallback option to use a cached version of the data if the API fails.\n6. Continuously Review and Update Your Understanding: As your application evolves, so will its dependencies. Regularly review and update your understanding of your application dependencies and how they impact your application.\n7. Use AWS Well-Architected Framework: The AWS Well-Architected Framework provides a set of best practices, design principles, and architectural patterns to help you design resilient applications on AWS. The framework provides a way to consistently measure your architectures against best practices and identify areas for improvement.\n\n\nMulti-Region fundamental 3: Understanding your workload dependencies https://docs.aws.amazon.com/whitepapers/latest/aws-multi-region-fundamentals/multi-region-fundamental-3-understanding-your-workload-dependencies.html.\n\nStage 2: Design and implement - AWS Prescriptive Guidance. https://docs.aws.amazon.com/prescriptive-guidance/latest/resilience-lifecycle-framework/stage-2.html.\n\nDesign principles - AWS Well-Architected Framework. https://docs.aws.amazon.com/wellarchitected/latest/framework/oe-design-principles.html."
+  },
+  {
+    "Activity": "Requirements Analysis",
+    "ADType": "RA-RE-F-APCP",
+    "Description": "How do you address the coupling with your dependencies?",
+    "Level 1": "Dependency coupling is unknown",
+    "Level 2": "Dependency coupling is known",
+    "Level 3": "Dependencies are all loosely coupled",
+    "Comments / Notes": "Drive customers toward the behavior of being able to fail over applications independently of each other.",
+    "References": "To address coupling with application dependencies, you should implement loosely coupled dependencies. Loose coupling helps isolate the behavior of a component from other components that depend on it, increasing resiliency and agility. Some ways to achieve loose coupling include: \n1. Build event-driven architectures using services like Amazon EventBridge to decouple components through events. - Use queuing services like Amazon SQS to integrate and decouple distributed systems. \n2. Containerize components as microservices that communicate over well-defined APIs. \n3. Avoid tight coupling through shared data stores, which can reintroduce coupling and hinder scalability.\nLoose coupling minimizes the impact of changes or failures in one component on other components. It allows you to modify code, add features, and scale components independently without affecting the performance of dependent components. This approach provides granular resilience and simplifies development cycles.\n\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/framework/wellarchitected-framework.pdf\n\nhttps://aws.amazon.com/blogs/big-data/amazon-mwaa-best-practices-for-managing-python-dependencies/\n\nhttps://docs.aws.amazon.com/lambda/latest/dg/best-practices.html"
+  },
+  {
+    "Activity": "Requirements Analysis",
+    "ADType": "RA-AN-F-RMSA",
+    "Description": "How do you create and use a checklist to align your application implementation with best practices and steer away from anti-patterns?",
+    "Level 1": "A single anti-pattern checklist is maintained and applied to all systems",
+    "Level 2": "Checklists for anti-patterns are tailored according to the system type, focusing on the most prevalent or significant anti-patterns for that particular system.",
+    "Level 3": "Anti-pattern checklists exist based on system type and criticality",
+    "Comments / Notes": "ORR checklists are better when adapted to the application environment. A single antipattern checklist may not fully account for differences between system types and criticality levels. A one-size-fits-all checklist could miss anti-patterns specific to certain situations.  ",
+    "References": "To create and utilize a checklist to align your application implementation with best practices and avoid anti-patterns, you should: \n1. Identify common anti-patterns in your organization or industry that can lead to issues like security vulnerabilities, failed deployments, or performance bottlenecks. Document these anti-patterns as items to avoid. \n2. Review established best practices and guidelines for application development, deployment, and operations. Incorporate relevant best practices into your checklist as items to follow. \n3. Involve key stakeholders like developers, operations teams, and security experts in creating the checklist to ensure it covers all important areas.\n4. Implement processes to validate the checklist items before deployments, such as automated testing, code reviews, and staging environment validations. \n5. Integrate the checklist into your development and deployment workflows, making it a mandatory step before pushing changes to production. \n6. Regularly review and update the checklist based on new threats, issues faced, or emerging best practices in the industry. \n7. Communicate the checklist and its importance across the organization to ensure consistent adoption and accountability.\n\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/framework/wellarchitected-framework.pdf\n"
+  },
+  {
+    "Activity": "Requirements Analysis",
+    "ADType": "RA-AN-F-CMMA",
+    "Description": "How frequently are you evaluating your application against the anti-pattern checklist?",
+    "Level 1": "Application is reviewed at design time",
+    "Level 2": "Application is reviewed periodically (fixed time)",
+    "Level 3": "Application is reviewed with every major feature release, or when there is a change in the environment.",
+    "Comments / Notes": "Progress towards a consistent review of the application, instead of only at specific times.",
+    "References": "It is recommended to periodically re-run operational readiness reviews (ORRs) on your application workloads to catch any drift from best practices and incorporate lessons learned from post-incident analysis. This helps keep you up to date on new best practices that arise over time. Specifically for assessing against anti-patterns related to code reviews, you should make code reviews a mandatory step before merging code changes. Regularly scheduled code reviews allow you to catch errors early, incorporate additional perspectives, and share knowledge across the team.\n\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/framework/wellarchitected-framework.pdf\n\nhttps://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/devops-guidance.html?did=wp_card&trk=wp_card"
+  },
+  {
+    "Activity": "Requirements Analysis",
+    "ADType": "RA-AN-F-RMSA",
+    "Description": "Which methodology are you using to model failure scenarios?",
+    "Level 1": "The approach to resilience modeling is informal and undocumented. The prediction of failure scenarios is reliant on the application team's experience and lacks a formal method or implementation.",
+    "Level 2": "The methodology is component-based. Each potential component failure (such as database, API, frontend) is modeled individually to ascertain its impact on the application. For instance, evaluate the effect on an application when the load balancer, frontend, and database fail in each case. Examples of component-based modeling methodologies include Failure Mode Effects Analysis (FMEA) and Fault Tree Analysis (FTA).",
+    "Level 3": "The methodology is systems-based. Failures are modeled considering the system functions, their failure modes, and impacts. The method works backwards from potential business losses to anticipate meaningful failure scenarios that consider all sources of change such as the system's environment, operational procedures, and client behavior.",
+    "Comments / Notes": "The component-based approach works well for identifying discrete component risks. Systems-based takes a more holistic view of interconnected failures. Formal methods provide structure but may require more effort/expertise.  Understanding potential failures from both component and system perspectives increase the resilience posture of an application. A formal method foster consistency and continuous improvement capabilities.",
+    "References": "The component-based strategy is effective for pinpointing risks associated with individual components. On the other hand, a systems-based approach offers a comprehensive perspective on interlinked failures. While formal methods bring structure, they might demand more effort or expertise. Comprehending potential failures from both the component and system viewpoints enhances an application’s resilience. A formal methodology promotes consistency and the capacity for ongoing improvement.\n\nSome best practices for modeling failure scenarios in application implementation include: \n1. REL11-BP02 Fail over to healthy resources: Design your application to automatically fail over to healthy resources in case of component failures. \n2. REL11-BP03 Automate healing on all layers: Implement automated healing mechanisms to recover from failures across all layers of your application.  \n3. OPS06-BP01 Plan for unsuccessful changes: Have a plan to revert to a known good state or remediate in the production environment if a deployment causes an undesired outcome. Strategies like deployment and rollback steps, change policies, feature flags, traffic isolation, and traffic shifting can help with this.\nAdditionally, it's recommended to follow: \n1. REL11-BP01 Monitor all components to detect failures quickly. \n2. REL12-BP03 Test functional requirements using techniques like unit tests and integration tests to validate required functionality. \n3. OPS06-BP02 Test deployments thoroughly before production rollout. \n4. OPS06-BP04 Automate testing and rollback processes.\n\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/operational-excellence-pillar/wellarchitected-operational-excellence-pillar.pdf\n\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/framework/wellarchitected-framework.pdf "
+  },
+  {
+    "Activity": "Requirements Analysis",
+    "ADType": "RA-AN-F-RMSA",
+    "Description": "How specific are the failure scenarios you use for resilience modeling?",
+    "Level 1": "Failure scenarios are defined by a centralized team without consideration of the applicable system.",
+    "Level 2": "Failure scenarios are defined by a centralized team based on historical scenarios that have occurred anywhere in the business.",
+    "Level 3": "Failure scenarios are derived from the system itself, informed by centralized standards.",
+    "Comments / Notes": "Higher progress when the anticipated failure scenarios are specific to the application.",
+    "References": ""
+  },
+  {
+    "Activity": "Requirements Analysis",
+    "ADType": "RA-AN-F-CMMA",
+    "Description": "How often does the application team revise their resilience model / failure scenarios?",
+    "Level 1": "A resilience model is created as part of the initial system design.",
+    "Level 2": "The resilience model is created as part of the system development lifecycle and is updated periodically.",
+    "Level 3": "The resilience model is created as part of the system development lifecycle and updated periodically, when a change in the usage is anticipated, or when an incident occurs.",
+    "Comments / Notes": "Higher progress when resilience modeling is updated on a dynamic (according with application environment) basis.",
+    "References": ""
+  },
+  {
+    "Activity": "Requirements Analysis",
+    "ADType": "RA-AN-F-RMSL",
+    "Description": "How do you predict the performanc of the application under high load conditions?",
+    "Level 1": "Load performance is evaluated at design time",
+    "Level 2": "Load performance is reviewed periodically against benchmarks and relevant metrics.",
+    "Level 3": "Load  performance is evaluated when the application environment changes, and is projected based on metrics. Analyzing relevant metrics, logs, and traces are taken into consideration.",
+    "Comments / Notes": "Higher progress when load performance is adapted when application requires, even forecasting changes in the environmental conditions.",
+    "References": "To model application performance under load conditions, some best practices include: \n1. Use benchmarking to drive architectural decisions and understand how different configurations and services impact performance under load. \n2. Monitor workload activity to identify components that consume the most resources, and optimize the code within those components to minimize resource usage while maximizing performance. \n3. Implement mechanisms that result in even utilization of components to reduce idle resources between tasks and minimize the impact of load spikes.\n4. Define SLA metrics based on the workload architecture while working with stakeholders. Once the SLA target is set, optimize the architecture to meet the SLA under load conditions \n5. Leverage observability by analyzing relevant metrics, logs, and traces to gain a comprehensive view of the workload's performance under load and address issues efficiently"
+  },
+  {
+    "Activity": "Requirements Analysis",
+    "ADType": "RA-AN-F-APCP",
+    "Description": "How are you preparing your application to handle changes in load?",
+    "Level 1": "Capacity management is performed manually, or adjusted based on static conditions, such as time-based scaling.",
+    "Level 2": "Capacity management is performed automatically, capacity is provisioned considering dynamic metrics such as autoscaling based on application metrics.",
+    "Level 3": "Capacity management is provisioned considering fault isolation boundaries, and uses static stability to avoid dependencies on control-planes.",
+    "Comments / Notes": "The more the application is able to handle load without changes in the control-plane, the better for resilience purposes.",
+    "References": "To avoid control plane dependencies and ensure fault isolation for capacity management, it is recommended to: \n1. Provision sufficient capacity in advance within fault isolated boundaries like Availability Zones or Regions. This allows failover to healthy resources without relying on control plane scaling operations during an outage. \n2. Leverage data plane services like AWS Lambda, Amazon EC2 Auto Scaling groups, and Amazon S3 for storing configuration data. This minimizes control plane actions needed for scaling or reconfiguration. \n3. For Kubernetes workloads, limit control plane actions to adding pods rather than nodes. Use over-provisioned nodes to handle scaling needs through data plane actions. \nThe benefits of these practices include increased resilience against control plane failures, improved fault isolation by containing failures within cells or Availability Zones, and higher success rates for automated remediation which reduces mean time to recovery.\n\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/framework/wellarchitected-framework.pdf"
+  },
+  {
+    "Activity": "Change Management",
+    "ADType": "CM-RE-F-APCP",
+    "Description": "How do you evaluate the method to deploy code?",
+    "Level 1": "Manual change management process for all implementations.",
+    "Level 2": "Automated deployment is used for certain implementations",
+    "Level 3": "Manual change management only for critical implementations, and automated drift detection in place.",
+    "Comments / Notes": "",
+    "References": "To evaluate the method for deploying code, you can consider the following metrics: \n1. Operator interventions: The number of deployments that required manual intervention, which indicates areas for potential automation and optimization. A higher count of manual interventions suggests the need to increase automation in the deployment pipeline and establish more trust in automated processes.\n2. Number of changes per release: The number of changes included in each software release. A high number of changes per release may indicate batching of work and lack of continuous integration, leading to longer lead times, increased risk of defects, and reduced ability to troubleshoot issues.\n. Deployment frequency: The frequency at which code is deployed to the production environment. This metric helps teams understand how quickly they can deliver changes, enhancements, and fixes to users\n\nSource:\nhttps://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/devops-guidance.pdf?did=wp_card&trk=wp_card"
+  },
+  {
+    "Activity": "Change Management",
+    "ADType": "CM-RE-F-APCP",
+    "Description": "Which environments do you maintain to test your deployments?",
+    "Level 1": "Releases are made directly into production",
+    "Level 2": "Releases are first implemented in a test environment with low parity to production environment",
+    "Level 3": "Releases are tested in a  production-like environment prior to deploy in production",
+    "Comments / Notes": "",
+    "References": "For testing code deployments, you should use dedicated test environments that mimic the production environment as closely as possible. These test environments allow you to validate that changes are ready for production deployment by simulating real-world conditions. At a minimum, you should have a staging environment that you monitor closely to catch potential issues early. Additional test environments like beta or zeta can be added as needed.\nIt is recommended to use infrastructure as code (IaC) to manage and deploy these test environments, ensuring consistent and predictable provisioning. Direct human intervention should be minimized, similar to production environments. Instead, rely on automated delivery pipelines with stages that deploy to the testing environments. Human access should be strictly controlled and audited, granted only in exceptional circumstances.\n\nSource:\nhttps://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/devops-guidance.pdf?did=wp_card&trk=wp_card"
+  },
+  {
+    "Activity": "Change Management",
+    "ADType": "CM-LE-F-APCP",
+    "Description": "How frequently are you releasing code in production?",
+    "Level 1": "Releases are planned quarterly or annually",
+    "Level 2": "Releases are planned monthly",
+    "Level 3": "Releases are planned weekly or daily",
+    "Comments / Notes": "",
+    "References": "Deployment frequency refers to how often code is deployed to a production environment. It helps teams understand how quickly they can deliver changes, enhancements, and fixes to users. A higher deployment frequency often correlates with a faster feedback loop resulting from continuous delivery and other mature DevOps practices like quality assurance and observability. Lower frequency may indicate manual or batched deployment processes, bottlenecks in the release pipeline, or a more cautious release strategy.\nTo measure deployment frequency, teams should regularly review deployment logs and count the number of successful deployments over a given period, such as daily, weekly, or monthly. The ideal deployment frequency will depend on the organization's needs and should balance high frequency with system stability.\n\nSource:\nhttps://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/devops-guidance.pdf?did=wp_card&trk=wp_card"
+  },
+  {
+    "Activity": "Change Management",
+    "ADType": "CM-RE-F-APCP",
+    "Description": "To what extent is automation integrated into your release pipeline?",
+    "Level 1": "Source compilation and unit testing are automated",
+    "Level 2": "Deployment from the pipeline and QA testing is automated",
+    "Level 3": "Staged deployment is automated into production environments.",
+    "Comments / Notes": "",
+    "References": "Automation in the release pipeline is a key DevOps practice that helps reduce human error, increase efficiency, and ensure consistency in the software delivery process. \nA pipeline should be triggered automatically upon code changes being merged into the main release branch. The pipeline should perform necessary quality assurance tests, build the application, and deploy the new version to the production environment in an automated manner. Automated deployment pipelines allow for repeated testing of the application in a series of pre-production environments that increasingly mirror the production configuration. This helps catch issues early before deploying to production. Automated governance capabilities ensure adherence to guardrails, while observability functions like alerts and logs provide visibility into the process. Automating the deployment pipeline frees up human resources and reduces the potential for human error.\n\nSource:\nhttps://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/devops-guidance.pdf?did=wp_card&trk=wp_card\n\nhttps://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/resilience-lifecycle-framework/resilience-lifecycle-framework.pdf"
+  },
+  {
+    "Activity": "Change Management",
+    "ADType": "CM-RE-R-APCR",
+    "Description": "How are you rolling back failed deployments?",
+    "Level 1": "Changes are made with manual rollback plan",
+    "Level 2": "Changes are made with an automatically triggered  rollback.",
+    "Level 3": "Changes are carried out with the infrastructure being regarded as unchangeable (canary, single box, blue/green) while taking into account Fault Isolation Boundaries. The strategy for rollback is to completely implement the most recent known infrastructure",
+    "Comments / Notes": "",
+    "References": "To roll back failed code deployments, you should implement an automatic rollback strategy that redeploys the last successful code revision, artifact version, or container image when certain metrics indicate an issue with the new deployment. The rollback should be initiated based on alarms linked to key metrics like fault rates, latency, CPU usage, memory usage, disk usage, and log errors. It's also recommended to incorporate a waiting period after deployment to monitor for potential issues that may not be immediately evident, especially under low load.\nThe rollback process should employ methods like rolling or blue/green deployments, or feature flags for a swift rollback with minimal disruption. You should also consider using advanced deployment methods for more granular control over deployments. Additionally, establish methods to prevent deployments during higher-risk times or when there are active system issues, such as blocking deployments when high-severity aggregate alarms are raised or during specific time windows.\n\nSource:\nhttps://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/devops-guidance.pdf?did=wp_card&trk=wp_card"
+  },
+  {
+    "Activity": "Change Management",
+    "ADType": "CM-MO-F-APCP",
+    "Description": "How does your team test whether a change was successful? ",
+    "Level 1": "The deployment are evaluated in the production environment to verify the success of the changes",
+    "Level 2": "Manual testing is performed on the production deployment prior to it handling traffic",
+    "Level 3": "Automated processes are used to test a production deployment before it starts handling traffic.",
+    "Comments / Notes": "",
+    "References": "To verify successful code deployments, you should perform post-deployment automated testing, including functional, security, regression, integration, and load testing. This allows you to identify any issues early and plan mitigations before deploying to production. Some recommended methods include: - Use deployment configurations like AWS CodeDeploy AppSpec files to define deployment and validation steps - Integrate AWS CodeDeploy with other AWS services or partner products for monitoring and testing - Monitor deployments using Amazon CloudWatch, AWS CloudTrail, and Amazon SNS notifications.\nIt's also advisable to create temporary parallel environments for testing every change, using infrastructure as code (IaC) to automate the deployment of test environments. This helps reduce work and ensures consistency and faster delivery. Adopting a test-driven development culture focused on testing deployments ensures teams deliver business value rather than managing releases.\n\nSource:\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/operational-excellence-pillar/wellarchitected-operational-excellence-pillar.pdf?did=wp_card&trk=wp_card"
+  },
+  {
+    "Activity": "Change Management",
+    "ADType": "CM-AN-F-APCP",
+    "Description": "Does the application team coordinate change release with other teams and the business?",
+    "Level 1": "The team verbally coordinates with other teams regarding their change schedule.",
+    "Level 2": "A central calendar is maintained to notify others of upcoming changes.",
+    "Level 3": "A central calendar is used for 2-way coordination of change releases.  The calendar is maintained with upcoming changes and business events the application team need to be aware of such as product promotions or security vulnerabilities for patching.",
+    "Comments / Notes": "",
+    "References": "To coordinate code deployments and releases with other teams and business stakeholders, it is recommended to use build and deployment management systems. These systems help automate the integration and deployment pipeline from code check-in through build, testing, deployment, and validation. This reduces lead time, encourages increased frequency of change, reduces the level of effort, and increases collaboration across teams.\nSome specific best practices for coordinating deployments and releases include: \n1. Use version control systems like AWS CodeCommit to manage code assets and changes. \n2. Automate the build, test, and deployment process using services like AWS CodeBuild, CodePipeline, and CodeDeploy. \n3. Test deployments in separate environments before promoting to production. \n4. Employ safe deployment strategies like blue/green or canary deployments to mitigate risks. \n5. Automate testing and rollback mechanisms in case of failed deployments. \n6. Share design standards and collaborate across teams to ensure alignment\n\nSource: \nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/operational-excellence-pillar/wellarchitected-operational-excellence-pillar.pdf?did=wp_card&trk=wp_card"
+  },
+  {
+    "Activity": "Change Management",
+    "ADType": "CM-RE-R-APCP",
+    "Description": "How do you managing version control for your system?",
+    "Level 1": "Application source code is held in a version control system.",
+    "Level 2": "Application source code and infrastructure as code is held in a version control system.",
+    "Level 3": "Application source code, infrastructure as code source, and resource configuration are all versioned in management systems.",
+    "Comments / Notes": "",
+    "References": "Here are some best practices for version control management: \n1. Use a version control system with appropriate access management policies. Implement role-based access control to restrict write access to specific roles or individuals, while allowing broad read access to open repositories. This promotes collaboration while safeguarding sensitive information.\n2. Keep feature branches short-lived. Feature branches allow structured development of new features, but should be merged into the main code base quickly to avoid divergence and merge conflicts. \n3. Use artifact repositories with enforced authentication and authorization to manage software components and dependencies.\n4. Maintain an approved open-source software license list and grant access only to trusted repositories to mitigate legal and security risks.\n5. Implement plans for deprecating and revoking outdated software components to maintain an up-to-date and secure codebase.\n6. Use version control capabilities to track changes, deploy new versions, detect changes, and revert to prior versions when needed, as described in the implementation guidance from source 5.\nSource:\n[DL.SCM.1], [DL.SCM.2], [DL.SCM.3] https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/devops-guidance.pdf?did=wp_card&trk=wp_card"
+  },
+  {
+    "Activity": "Change Management",
+    "ADType": "CM-AN-F-APCP",
+    "Description": "What measures are you taking to ensure that the code written adheres to organizational standards and is devoid of known issues?",
+    "Level 1": "The organization has established guidelines for maintaining code quality",
+    "Level 2": "The organization has automated or manual code reviews in place to detect potential issues.",
+    "Level 3": "Techniques like test-driven development or pair programming are used to prevent issues.",
+    "Comments / Notes": "",
+    "References": "To ensure code quality and security in CI/CD pipelines, it is recommended to: \n1. Integrate security tools like static code analysis, vulnerability scanning, and secret detection into pre-commit hooks, IDEs, and the CI pipeline. This allows for continuous checking of code changes before they are committed to the repository. \n2. Enforce coding standards and identify common flaws like style, formatting, and security issues before code is published to the repository. Tools like pre-commit, Husky, Gitleaks, and GitGuardian can help with this.\n3. Encourage frequent code commits and integrations, as smaller changes are easier to test and debug, reducing the risk of significant issues. \n4. Treat infrastructure as immutable and replace components instead of modifying them. Build new infrastructure through tested code deployed via the pipeline. \n5. Use AWS services like CodeGuru for code quality insights, CodeWhisperer for security recommendations within the IDE, and Inspector for vulnerability assessments\n\nSource:\nhttps://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/resilience-lifecycle-framework/resilience-lifecycle-framework.pdf\nhttps://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/devops-guidance.pdf?did=wp_card&trk=wp_card"
+  },
+  {
+    "Activity": "Change Management",
+    "ADType": "CM-AN-F-APCP",
+    "Description": "What constitutes a change to be managed through the change management process?",
+    "Level 1": "Only critical or high impact changes undergo change control to reduce risk",
+    "Level 2": "All application and infrastructure changes go through change control",
+    "Level 3": "All changes, including configuration changes, go through change control",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "Change Management",
+    "ADType": "CM-RE-R-APCR",
+    "Description": "How quickly and easily can configuration of your system be changed?",
+    "Level 1": "Some configuration is defined in application code. Changes to configuration values outside of the code require a relaunch of the application / system.",
+    "Level 2": "Changes to configuration values are detected by the system and adopted without relaunching the system.",
+    "Level 3": "Changes to configuration values are detected by the application and adopted in alignment with fault isolation boundaries.",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "Change Management",
+    "ADType": "CM-AN-R-APCR",
+    "Description": "How do you deploy changes into production to reduce risk?",
+    "Level 1": "Changes are released using a blue / green deployment",
+    "Level 2": "Changes are released into production using a staged approach",
+    "Level 3": "Changes are released into production using a staged approach aligned with fault isolation boundaries.",
+    "Comments / Notes": "Blue / Green will impact all customers if broken, staged will only impact a subset of customers if aligned with fault isolation boundaries",
+    "References": ""
+  },
+  {
+    "Activity": "Disaster Recovery",
+    "ADType": "DR-RE-R-APCR",
+    "Description": "What criteria do you use to choose the Disaster Recovery strategies for your application?",
+    "Level 1": "DR strategies are prescribed by the business",
+    "Level 2": "DR strategies are developed by the application team",
+    "Level 3": "DR strategies are developed by the application team for specific scenarios",
+    "Comments / Notes": "Higher progress when DR strategies are customized to the application, for the specific scenarios.",
+    "References": "When choosing a disaster recovery (DR) strategy for applications, the key criteria to consider are: \n1. Recovery objectives: The DR strategy should align with the defined recovery time objective (RTO) and recovery point objective (RPO) for the application. The RTO specifies the maximum acceptable downtime, while the RPO specifies the maximum acceptable data loss. \n2. Application architecture: The DR strategy should be compatible with the application's architecture, such as whether it is monolithic or distributed, stateful or stateless, and its data storage requirements. \n3. Cost: Different DR strategies have varying costs associated with implementation, maintenance, and potential data transfer. The chosen strategy should fit within the organization's budget and provide an acceptable balance between cost and risk mitigation.\n4. Recovery site: The DR strategy should consider the location and infrastructure requirements for the recovery site, such as whether it will be in a different Availability Zone, AWS Region, or a separate cloud provider. \n5. Operational complexity: The DR strategy should align with the organization's operational capabilities and resources. Strategies that require significant manual intervention or specialized skills may not be suitable for all organizations."
+  },
+  {
+    "Activity": "Disaster Recovery",
+    "ADType": "DR-RE-R-APCR",
+    "Description": "Is the disaster recovery process used by the team, owned by the team?",
+    "Level 1": "The disaster recovery processes are documented and owned by a central DR team.",
+    "Level 2": "An application team member owns the team's implementation and adaptation of the centralized disaster recovery processes.",
+    "Level 3": "A process is in place to feedback improvements from the application team's experience to the centrally managed processes.",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "Disaster Recovery",
+    "ADType": "DR-RE-R-APCR",
+    "Description": "What is your protocol for communications during an incident?",
+    "Level 1": "Teams possess an inherent understanding (a tribal knowledge)  of whom to notify and what details to share",
+    "Level 2": "Runbooks provide explicit details about communication channels, roles, responsibilities, and data to share.",
+    "Level 3": "Communication channels are set up automatically. Alerts are automatically triggered and shared to the appropriate individuals",
+    "Comments / Notes": "",
+    "References": "When defining a communications protocol for incidents related to disaster recovery strategies, it is important to: \n1. Define roles and responsibilities, such as assigning a major incident manager to oversee incident response activities, designating a communications manager to coordinate all communications, and including the support manager to provide consistent communication through support tickets. \n2. Establish communication channels and methods for different audiences, such as internal teams, customers, and partners. This may include email, status pages, social media, and other channels. \n3. Develop templates and guidelines for crafting clear and consistent messaging during incidents, including the tone, level of detail, and frequency of updates. \n4. Ensure the communications plan is adaptable and scalable to handle different types and severities of incidents. \nThe communications protocol should be an integral part of the overall disaster recovery strategy, which should define recovery objectives for downtime and data loss, implement defined recovery strategies (such as backup and restore, standby, or active/active), test the disaster recovery implementation, and manage configuration drift at the disaster recovery site or region.\nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+  },
+  {
+    "Activity": "Disaster Recovery",
+    "ADType": "DR-MO-R-APCR",
+    "Description": "Is data recovery automated ?",
+    "Level 1": "Critical, non-derived data is backed up regularly using automation.",
+    "Level 2": "All essential datasets are automatically backed-up.",
+    "Level 3": "All datasets are automatically backed-up.",
+    "Comments / Notes": "",
+    "References": "When automating data recovery processes, it is recommended to: \n1. Define recovery objectives like Recovery Point Objective (RPO) and Recovery Time Objective (RTO) to maintain business continuity and minimize data loss. \n2. Choose backup tools that support automation and can be integrated into DevOps pipelines. These tools should have capabilities to schedule backups, maintain backups, and ensure data integrity. \n3. Automate backup processes to run periodically using services like AWS Lambda, AWS Step Functions, and Amazon EventBridge. \n4. Limit the number of automatic recovery attempts to avoid unnecessary reruns and resource consumption. Create log entries for recovery attempts and results. Additionally, it is advisable to: 1. Define a backup policy outlining the types of data, backup frequency, retention duration, and restoration processes. \n2. Automate notifications to stakeholders if data validation fails or if recovery time exceeds the established RTO, using services like Amazon SNS. \n3. Discover recovery procedures that work for multiple failure types, such as configuring automatic retries for network disruptions and managed scaling for resource availability.\n\nhttps://docs.aws.amazon.com/wellarchitected/latest/analytics-lens/analytics-lens.html?did=wp_card&trk=wp_card"
+  },
+  {
+    "Activity": "Disaster Recovery",
+    "ADType": "DR-RE-R-APCR",
+    "Description": "What methods are you using to validate your data recovery mechanisms to meet your Recovery-Point-Objective (RPO)/Recovery-Time-Objective (RTO)?",
+    "Level 1": "Backkup restoration is tested on an ad-hoc basis, typically focusing on the most crucial datasets.",
+    "Level 2": "Backups undergo regular (at fixed intervals) testing and restoration processes, with all essential datasets are tested.",
+    "Level 3": "All datasets undergo backup and restore testing. These tests are conducted whenever significant modifications are needed in the application or environment, such as when business requirements necessitate changes in the application’s RTO/RPO.",
+    "Comments / Notes": "",
+    "References": "To test data recovery mechanisms and ensure they meet the defined RPO and RTO, you should: \n1. Simulate a disaster scenario and initiate the data recovery process. \n2. Measure the amount of time it takes to fully restore service (RTO) and compare it against the defined RTO objective. \n3. Determine the amount of data loss that occurred between the last recovery point and the simulated disaster (RPO) and compare it against the defined RPO objective. \nAdditional best practices for testing disaster recovery implementations include: \n- Validate that there is no configuration drift between the production and disaster recovery environments. \n- Test automation scripts and procedures for the recovery process to ensure they execute properly. \n- Perform testing on a regular schedule, not just a one-time event, to account for changes over time.\n\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/framework/wellarchitected-framework.pdf"
+  },
+  {
+    "Activity": "Disaster Recovery",
+    "ADType": "DR-RE-R-APCR",
+    "Description": "How detailed are your disaster recovery plans?",
+    "Level 1": "A single disaster recovery plan is used to  restore the entire system from source and backups.",
+    "Level 2": "Multiple disaster recovery plans exist for sets of scenarios with similar conditions.",
+    "Level 3": "Various plans have been created, each considering the Recovery Time Objective (RTO) based on the business impact and the likelihood of the scenario.",
+    "Comments / Notes": "",
+    "References": "To create detailed disaster recovery plans, you should: \n1. Define recovery objectives for downtime and data loss that are acceptable for your workloads. \n2. Use defined recovery strategies like backup and restore, standby (active/passive), or active/active to meet the recovery objectives. \n3. Test the disaster recovery implementation to validate that it meets the recovery objectives. \n4. Manage configuration drift at the disaster recovery site or region to ensure consistency with the primary site. \n5. Automate the recovery process as much as possible to improve reliability and speed"
+  },
+  {
+    "Activity": "Disaster Recovery",
+    "ADType": "DR-MO-R-APCR",
+    "Description": "How do you manage and maintain drift between the primary and secondary site?",
+    "Level 1": "A documented process is in place for regularly ensuring the parity between the two sites.",
+    "Level 2": "Changes in the primary site are actively mirrored to the secondary site through established automation.",
+    "Level 3": "The comparison between the primary and secondary sites is performed automatically and verified on a regular basis.",
+    "Comments / Notes": "",
+    "References": "To manage configuration drift between the primary and disaster recovery (DR) sites, you should: \n1. Ensure your delivery pipelines deploy to both the primary and DR sites, including dev and test environments. This helps keep the recovery plan in sync with released code and infrastructure updates. \n2. Use AWS services like AWS Config, AWS CloudFormation, and AWS CloudTrail to monitor and detect configuration drift between the primary and DR sites. AWS Config can continuously monitor resource configurations and detect drift, while CloudFormation can detect drift in deployed stacks.\n3. Implement code-based management practices across your infrastructure, applications, and operational procedures. This provides version control, testing, validation, and mitigation of human error and configuration drift, which reduces the mean time to recover. \n4. Ensure the DR site has the required infrastructure, data, and configurations by checking that AMIs, service quotas, and other resources are up-to-date and consistent with the primary site.\n\nhttps://docs.aws.amazon.com/wellarchitected/latest/financial-services-industry-lens/financial-services-industry-lens.html"
+  },
+  {
+    "Activity": "Disaster Recovery",
+    "ADType": "DR-AN-R-APCR",
+    "Description": "What measures are you taking to prevent reaching AWS Service limits at your failover site?",
+    "Level 1": "Increases in service limits at the primary site are recorded and referred to during disaster recovery planning",
+    "Level 2": "Service limits are periodically (fixed time) compared between primary and secondary sites.",
+    "Level 3": "Service limits in the secondary site are updated at the same time as the service limit increases in the primary site.",
+    "Comments / Notes": "",
+    "References": "To prevent reaching AWS service limits at a disaster recovery site, it is important to understand the hard or soft quotas and limits for the services you plan to use. Some key measures include: \n- Analyzing and reconfiguring necessary quotas or contacting AWS Support in advance before deploying a replacement workload at the disaster recovery site. \n- Testing the application at peak traffic to stress the utilization of resources and identify potential limits that could be reached. - Provisioning resources with proper analysis of the required size, avoiding overprovisioning beyond expected peaks.\nAdditionally, you can utilize AWS services like AWS Config to continuously monitor and record your AWS resource configurations at the disaster recovery site. AWS Config can detect configuration drift and trigger AWS Systems Manager Automation to fix drift and raise alarms if service limits are being approached.\n\nhttps://docs.aws.amazon.com/pdfs/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-workloads-on-aws.pdf"
+  },
+  {
+    "Activity": "Disaster Recovery",
+    "ADType": "DR-LE-R-CMMS",
+    "Description": "How frequently are you testing your failover strategy?",
+    "Level 1": "Failover testing is conducted at regular intervals, such as twice a year.",
+    "Level 2": "Failover tests are executed after significant changes in the application.",
+    "Level 3": "Failover tests are executed unannounced, as part of GameDays exercises.",
+    "Comments / Notes": "",
+    "References": "It is recommended that you regularly test failover to your workload’s Disaster Recovery (DR) Region to ensure that RTO and RPO are met. \n\nIt's important to avoid developing recovery paths that are rarely executed. If you don’t frequently test this failover, you might find that your assumptions about the capabilities of the secondary data store are incorrect. Therefore, it's crucial to establish recovery patterns and regularly test them. \n\nIf you have a complex or critical recovery path, you still need to regularly execute that failure in production to validate that the recovery path works. \n\nTest your failover strategy regularly and adjust the frequency based on the results and changes in your environment. This will help ensure that your system remains resilient and that you're prepared for any unexpected events.\n\nTesting disaster recovery - Disaster Recovery of Workloads on AWS: https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/testing-disaster-recovery.html.\nDisaster recovery options in the cloud: https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-options-in-the-cloud.html."
+  },
+  {
+    "Activity": "High Availability",
+    "ADType": "HA-RE-F-APCR",
+    "Description": "How are you planning for hard dependency failures?",
+    "Level 1": "Breakglass procedure. \nThis could involve implementing an alternate method to carry out the system operation (a workaround), or it might require waiting for the dependency to recover.",
+    "Level 2": "Contingency plan (manual backup) for dependencies: This could involve manually redirecting to a substitute dependency, or depending on static or outdated data",
+    "Level 3": "Real-time recovery of impaired dependencies (for instance, through redundancy)",
+    "Comments / Notes": "",
+    "References": "Some best practices for handling hard dependency failures in AWS include:\n\n1. Minimize Dependencies in Disaster Recovery Plan: This involves reducing dependencies in your DR plan and manually controlling failover even if critical AWS services are disrupted. For instance, using Amazon Route 53 for Regional failover routing is a common pattern for DR events. \n2. Implement Graceful Degradation: Transform hard dependencies into soft dependencies. This means that your application components should continue to perform their core function even if dependencies become unavailable. They might serve slightly stale data, alternate data, or even no data. This ensures that the overall system function is only minimally impeded by localized failures while delivering the central business value.\n3. Use the circuit breaker pattern to monitor failing calls to a downstream system. If a high number of calls are failing, it will stop sending requests to that system and only occasionally let calls through to test if it's available again. \n4. Cache or include sane defaults in container or machine images in case a parameter store is unavailable.\n5. For non-functional dependencies like monitoring services, continue executing business functions as usual even if unable to send logs, metrics, or traces. \n6. Other practices include throttling requests to avoid overloading downstream systems, failing fast and limiting queues to prevent cascading failures, setting client timeouts, and making systems stateless where possible. It's also recommended to implement emergency levers like kill switches to quickly disable functionality in case of failures.\nManual Intervention: In some cases, manual intervention may be necessary. For example, if an EC2 instance fails, you might need to launch a new instance in your virtual private cloud (VPC) to manually correct errors.\n\nSource: \nMinimizing Dependencies in a Disaster Recovery Plan: https://aws.amazon.com/blogs/architecture/minimizing-dependencies-in-a-disaster-recovery-plan/.\nREL05-BP01 Implement graceful degradation to transform applicable hard: https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_mitigate_interaction_failure_graceful_degradation.html.\nTroubleshoot EC2 Linux instance status check failure due to OS errors: https://repost.aws/knowledge-center/ec2-linux-status-check-failure-os-errors."
+  },
+  {
+    "Activity": "High Availability",
+    "ADType": "HA-RE-F-APCP",
+    "Description": "How are you defining and implementing fault isolation boundaries?",
+    "Level 1": "Taking advantage of AWS fault isolation boundaries (AWS accounts, regions, and zonal services)",
+    "Level 2": "Implemented fault isolation boundaries within the platform layer. This could include abstraction layers provided by Cloud Engineering teams, or services delivered by platform engineering teams, such as container platforms (EKS) or instance provisioning (EC2).",
+    "Level 3": "Implemented fault isolation boundaries within application architecture (redundant resources, cellular architecture, sharding data)",
+    "Comments / Notes": "Does the application team use AWS provided fault isolation boundaries?  Have they implemented fault isolation at both the platform and application level?",
+    "References": "Some best practices for defining and implementing fault isolation boundaries on AWS include: \n1. Architect your workloads to take advantage of AZs, Regions, and the separation of control and data planes. Design your applications to be resilient to failures within an AZ or Region. \n2. For global services, create redundant resources like dashboards and break-glass users in multiple Regions to ensure availability during Regional failures. \n3. Update your Identity Provider (IdP) configuration to use different Regional SAML endpoints if your preferred endpoint is impaired. Create break-glass users in case your IdP is unavailable. \n4. Understand how the AWS services you depend on are designed using fault isolation boundaries like AZs, Regions, control planes, and data planes. Make intentional choices about the dependencies for your workload based on this understanding. \n5. Consider the potential impacts on your workload and its ability to recover during control plane impairments when architecting for zonal, Regional, and global services.\n\nSource:\nApplying Fault Isolation: https://docs.aws.amazon.com/pdfs/whitepapers/latest/aws-fault-isolation-boundaries/aws-fault-isolation-boundaries.pdf"
+  },
+  {
+    "Activity": "High Availability",
+    "ADType": "HA-RE-F-APCR",
+    "Description": "How are you preparing to evacuate fault isolation boundaries (FIB)?",
+    "Level 1": "Manual process. It provides incomplete coverage as not all fault isolation boundaries (FIB) have an associated process.",
+    "Level 2": "Manual process, evacuation of the impaired isolation boundary for all users and user journeys",
+    "Level 3": "Automated fault isolation boundaries evacuation",
+    "Comments / Notes": "",
+    "References": "Its importance of understanding AWS's fault isolation boundaries and designing architectures that take advantage of these boundaries to improve resilience. Some relevant points include: \n1. AWS uses multiple fault isolation constructs like AZs and Regions to enable customers to design resilient workloads. \nCustomers should understand the different service scopes (zonal, regional, and global) and take dependencies on services accordingly to minimize single points of failure. \n- Consider taking dependencies on global services while minimizing failure risk.\nThese recommendations for building resilient architectures across multiple AZs and Regions can help prepare workloads to withstand and recover from failures within a given fault isolation boundary.\n\nSource:\nApplying Fault Isolation: https://docs.aws.amazon.com/pdfs/whitepapers/latest/aws-fault-isolation-boundaries/aws-fault-isolation-boundaries.pdf"
+  },
+  {
+    "Activity": "High Availability",
+    "ADType": "HA-RE-F-APCR",
+    "Description": "How are you preparing for cases when the main response to an incident (automated HA control or recovery procedure) is not working?",
+    "Level 1": "All anticipated events have at least one response",
+    "Level 2": "All anticipated events have more than one response for graceful degradation",
+    "Level 3": "All anticipated events have more than one response and the conditions under which the layered response will execute is documented",
+    "Comments / Notes": "Have responses to disruptions been layered such that, when one response no longer prevents impairment a second response is engaged?",
+    "References": "(Mau) We should remove this question. If needed additional layers of controls, that should be part of the risk analysis (likelihood, impact, cost) already asked in the previous question."
+  },
+  {
+    "Activity": "High Availability",
+    "ADType": "HA-LE-R-CMMS",
+    "Description": "Under what circumstances should the effectiveness of implemented High Availability (HA) controls be evaluated?",
+    "Level 1": "Reactive: Reviews are triggered by major incidents where the HA control failed. ",
+    "Level 2": "Proactive: Evaluations are conducted on a regular schedule or when error rates exceed a certain threshold, in order to identify and address potential issues at an early stage",
+    "Level 3": "Predictive: Additional proactive mechanisms are used to review control effectiveness. Example of such mechanisms are controlled tests, blue/green deployments, or using machine learning to identify anomalies and patterns in metrics.\n\n",
+    "Comments / Notes": "The levels show an evolution from purely reactive reviews after incidents, to incorporating more proactive and predictive methods of monitoring for conditions necessitating reviews. This facilitates continuous improvement of response resilience by identifying and addressing issues before they negatively impact the user experience.",
+    "References": "When operating highly available workloads, you need to be able to prove mathematically that the controls and designs you have implemented are achieving the desired level of availability. Even the best designs built with good intentions might not consistently achieve the intended outcome. This means you need mechanisms to measure the effectiveness of the high availability solution. \nAvailability is typically measured as a percentage of uptime over a period of time, such as a month or year. However, measuring availability as a binary state (up or down) may not provide enough insights. It's important to measure partial failure modes, such as the percentage of users or requests affected, the percentage of locations impacted, or percentiles of latency. These partial failure modes can provide more utility in understanding and improving the availability of your workload.\n\nSource:\nhttps://docs.aws.amazon.com/pdfs/whitepapers/latest/availability-and-beyond-improving-resilience/availability-and-beyond-improving-resilience.pdf"
+  },
+  {
+    "Activity": "High Availability",
+    "ADType": "HA-AN-F-APCP",
+    "Description": "How are you preparing to avoid hitting  AWS Service limits?",
+    "Level 1": "All service limits and quotas that affect the application are documented and accounted for through architecture design.",
+    "Level 2": "Service limits and quotas are manually tracked to identify when they are nearing the limit",
+    "Level 3": "Service limits and quotas are automatically monitored. Alarms are created. Automatic response is implemented whenever possible.",
+    "Comments / Notes": "Higher progress when service limits and quotas are automatically monitored and managed.",
+    "References": "Some best practices for avoiding AWS service limits: \n1. Be aware of your default service quotas and manage quota increase requests for your workload architecture. Know which cloud resource constraints like disk or network could potentially impact your workload. \n2. Monitor and manage service quotas across all accounts and regions. Use tools like AWS Trusted Advisor to identify services nearing their quotas. \n3. Accommodate fixed service quotas and constraints through your application architecture. If quotas cannot be adjusted to meet your needs, contact AWS Support for potential mitigations. \n4. Automate quota management by monitoring key metrics and implementing remediation steps to prevent reaching service limits that could cause disruptions.\n5. Ensure there is sufficient gap between current quotas and maximum usage to accommodate failover scenarios. \n6. Regularly assess service quota usage to determine appropriate limits for your accounts. Quotas serve as guardrails to prevent over-provisioning resources. \n7. Understand the difference between service quotas (limits on API operations) and resource constraints (limits defined by the resource type like storage capacity)\n\nSource:\nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+  },
+  {
+    "Activity": "High Availability",
+    "ADType": "HA-RE-R-APCP",
+    "Description": "How does your team document its operational procedures?",
+    "Level 1": "Operational procedures are documented in an ad-hoc fashion. For example, documented as simple checklists or similar approach.",
+    "Level 2": "There is a standardize format to document the Runbooks. Not only operational procedures, but also expected outcomes are part of the documentation.",
+    "Level 3": "The Runbook format provides a complete guidance around operational procedures. It includes error handling, tooling, permissions, exceptions, and escalations if a problem occurs.",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "High Availability",
+    "ADType": "HA-RE-R-APCP",
+    "Description": "Does your team automate its runbooks?",
+    "Level 1": "A minimum of the runbooks are automated.",
+    "Level 2": "At least half of the runbooks are automated.",
+    "Level 3": "Most runbooks are automated.",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "High Availability",
+    "ADType": "HA-LE-R-CMMS",
+    "Description": "How frequently are runbooks reviewed?",
+    "Level 1": "Runbooks are authored ad-hoc. They are only reviewed when its execution fails.",
+    "Level 2": "Runbooks are updated periodically (on a fixed schedule).",
+    "Level 3": "Runbooks are updated in accordance with change management procedures, and tested when the application or the environment goes under major changes.",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "High Availability",
+    "ADType": "HA-RE-R-APCP",
+    "Description": "How do you control changes to, and make your runbooks available for use?",
+    "Level 1": "Runbooks are stored in undocumented systems.",
+    "Level 2": "Runbooks are stored in a central location.",
+    "Level 3": "Runbooks are stored in a central location with search functionality and change history.",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "High Availability",
+    "ADType": "RR-RE-R-RMSS",
+    "Description": "How do you consider likelihood, impact, and cost when selecting preventive, detective, testing, and recovery controls?",
+    "Level 1": "The choice of response is based on organizational policies, well-known frameworks, and best practices.",
+    "Level 2": "Responses are selected by the application team with input from organizational directives",
+    "Level 3": "Responses are selected using a long-term cost benefit analysis, weighing loss prevented or mitigated against implementation and operation costs, considering reducing errors, minimizing time to recover, and reduce operational burden.",
+    "Comments / Notes": "",
+    "References": "When selecting preventive, detective, and recovery controls for applications, it's important to consider the likelihood of potential incidents, their impact on the business, and the associated costs. Here are some key steps:\n1. Determine the criticality of the application and potential consequences if it is disrupted, such as monetary costs, customer impact, operational issues, and regulatory risks. Engage with business stakeholders to understand and quantify these impacts. \n2. Estimate the likelihood of different types of incidents that could impact the application, such as weather events, power outages, etc. Base this on historical data and statistics. \n3. Perform a risk analysis by multiplying the likelihood and consequences for each potential incident type. This gives you an estimated risk cost. 4. Compare the risk cost to the total cost of ownership (TCO) for implementing preventive controls (e.g. monitoring, auditing), detective controls (e.g. logging, alerting), and recovery controls (e.g. backup, restore testing). If the TCO is lower than the risk cost, it makes financial sense to implement those controls. 5. In addition to financials, ensure the RTO and RPO for the controls meet the application's requirements based on its criticality.\n\nhttps://docs.aws.amazon.com/pdfs/whitepapers/latest/disaster-recovery-of-on-premises-applications-to-aws/disaster-recovery-of-on-premises-applications-to-aws.pdf\n\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/framework/wellarchitected-framework.pdf "
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-RE-R-APCR",
+    "Description": "How do you plan your responses to an incident?",
+    "Level 1": "Events are managed ad-hoc using best effort",
+    "Level 2": "Events are managed using playbooks.",
+    "Level 3": "Events are handled using playbooks, with defined escalation routes and collaboration across teams.",
+    "Comments / Notes": "",
+    "References": "To prepare for incident response, it is recommended to develop a detailed incident management plan that outlines the roles, responsibilities, and processes to follow during a large-scale incident. The plan should cover how to maintain system availability and reliability by automatically scaling resources, re-routing traffic, and failing over to backup systems when needed. It should also include sections on: \n- An incident response team overview and their goals/functions - Roles and responsibilities of stakeholders \n- A communication plan with contact information and out-of-band communication channels \n- Phases of incident response (detect, analyze, contain, eradicate, recover) and associated actions \n- Incident severity definitions and prioritization for escalation procedures. Additionally, it is recommended to conduct post-incident analysis through retrospectives to drive continuous improvement of the analysis and response mechanisms.\n\nSource:\nhttps://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/devops-guidance.pdf?did=wp_card&trk=wp_card"
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-LE-R-APCR",
+    "Description": "Is the playbook format standardized?",
+    "Level 1": "Playbooks are documented ad-hoc.",
+    "Level 2": "The Playbook format is standardized and documents the process of diagnosis and discovery.",
+    "Level 3": "The Playbook format includes tooling and permissions.  It details the communication plan to update stakeholders and an escalation plan.  The Playbooks  reference  to  appropriate Runbooks when identified root causes.",
+    "Comments / Notes": "",
+    "References": "To prepare for incident response, it is recommended to develop a detailed incident management plan that outlines the roles, responsibilities, and processes to follow during a large-scale incident. The plan should cover how to maintain system availability and reliability by automatically scaling resources, re-routing traffic, and failing over to backup systems when needed. It should also include sections on: \n- An incident response team overview and their goals/functions - Roles and responsibilities of stakeholders \n- A communication plan with contact information and out-of-band communication channels \n- Phases of incident response (detect, analyze, contain, eradicate, recover) and associated actions \n- Incident severity definitions and prioritization for escalation procedures. Additionally, it is recommended to conduct post-incident analysis through retrospectives to drive continuous improvement of the analysis and response mechanisms.\n\nSource:\nhttps://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/devops-guidance.pdf?did=wp_card&trk=wp_card"
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-RE-R-APCR",
+    "Description": "Does your team automate its playbooks?",
+    "Level 1": "Some playbooks are automated, with the level of automation varying based on independent, uncoordinated efforts",
+    "Level 2": "A significant number of playbooks are automated, with ongoing and coordinated efforts to further automate manual playbooks.",
+    "Level 3": "The majority of playbooks are automated. The application team has set objectives for automating playbooks. There is a well-defined plan to automate all playbooks that can automated",
+    "Comments / Notes": "",
+    "References": "some best practices for automating incident response playbooks: \n1. Start by creating playbooks for common, low-risk incidents where the root cause is well-known. Automate the steps in these playbooks using tools like AWS Systems Manager Automation. \n2. As your organization matures, move on to automating playbooks for higher-risk incidents or those with less well-known root causes. \n3. Store playbooks centrally and keep them regularly updated. Provide links to relevant playbooks within alert messages. \n4. Use AWS Systems Manager Incident Manager to automate the triage, stakeholder communication, and collaboration aspects of incident response. It can trigger automated playbooks from AWS Systems Manager Automation.\n5. Ensure playbooks have clear steps for investigation, define any special tools or permissions needed, provide a way to track investigation status, and include an escalation plan if the root cause cannot be identified. \n6. For identified root causes, have companion runbooks that describe the steps to resolve the issue in an automated way.\n\nSource:\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/operational-excellence-pillar/wellarchitected-operational-excellence-pillar.pdf?did=wp_card&trk=wp_card"
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-LE-R-CMMS",
+    "Description": "How frequently are playbooks reviewed?",
+    "Level 1": "Playbooks are authored ad-hoc. They are only reviewed when they fail to effectively address an incident.",
+    "Level 2": "Playbooks are updated periodically (on a fixed schedule).",
+    "Level 3": "Playbooks are updated in accordance with change management procedures, and tested under controlled environments (as part of Game Days, for example).",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-RE-R-APCR",
+    "Description": "How do you control changes to, and make your playbooks available for use?",
+    "Level 1": "Playbooks are stored in undocumented systems.",
+    "Level 2": "Playbooks are stored in a central location.",
+    "Level 3": "Playbooks are stored in a central location with search functionality and change history.",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-LE-C-PEOD",
+    "Description": "What is your approach to train your teams for incident management?",
+    "Level 1": "Training is provided through a knowledge base (theoretical training)",
+    "Level 2": "Teams execute table-top exercises and contained simulations (Fault injection).",
+    "Level 3": "Teams actively participate in Game days and full event simulations.",
+    "Comments / Notes": "",
+    "References": "\"Some best practices for training incident response teams include: \n1. Developing and regularly testing an incident response plan that outlines roles, responsibilities, communication plans, and response phases/actions. The plan should be tailored to the organization's specific needs.\n2. Conducting regular \"\"game day\"\" exercises to simulate security incidents or failures. This helps build experience and identify areas for improvement in the team's response processes.\n3. Creating an incident knowledge base to document past incidents, lessons learned, and effective response strategies. This knowledge base can be used for training and to improve future incident handling.\n4. Providing ongoing training and enablement for incident response team members to keep their skills up-to-date on the latest threats, tools, and response techniques.\nSource:\nhttps://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/resilience-lifecycle-framework/resilience-lifecycle-framework.pdf\nhttps://docs.aws.amazon.com/wellarchitected/latest/financial-services-industry-lens/financial-services-industry-lens.html\""
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-LE-C-PEOC",
+    "Description": "What is the procedure for a person to escalate an incident?",
+    "Level 1": "A process is established for any team member to raise a potential issue through an escalation route",
+    "Level 2": "Escalation is encouraged. Safeguards are implemented to prevent any retribution against the individual who initiates the escalation.",
+    "Level 3": "There are mechanisms  in place to automatically iterate escalations up the command chain, until a human acknowledge the report. ",
+    "Comments / Notes": "",
+    "References": "Some best practices for incident escalation procedures include: \n- Define clear escalation paths with a series of people with increasing authority to take action, along with their contact information. Escalation should continue until the risk is mitigated. \n- Establish prompts for when to escalate, such as setting up CloudWatch alarms to create incidents in AWS Systems Manager Incident Manager. \n- Pre-approve mitigation actions for anticipated scenarios to speed up resolution. \n- Clearly identify owners for each step of the escalation path. \n- Document third-party service level agreements and set protocols for vendor communication during incidents. \n- Train staff on the escalation process and conduct regular incident response drills. \n- Review and update escalation procedures based on lessons learned from incident post-mortems and continuous feedback.\n\nSource:\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/operational-excellence-pillar/wellarchitected-operational-excellence-pillar.pdf?did=wp_card&trk=wp_card"
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-LE-C-RMSL",
+    "Description": "When does your team create an event report?",
+    "Level 1": "High severity incidents are documented ",
+    "Level 2": "All incidents are documented",
+    "Level 3": "Incidents, releases, chaos experiments and abnormal behavior are documented ",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-LE-C-RMSL",
+    "Description": "How detailed are your event reports?",
+    "Level 1": "Events are documented with screenshots and data captures",
+    "Level 2": "Reports use a methodology like '5 whys' to identify root cause of the event.",
+    "Level 3": "Reports capture situational information, timelines, and other types of evidence relevant to the event.",
+    "Comments / Notes": "Reports that follows a established Corrections of Error process are a better support for resilience improvements.",
+    "References": "Some best practices for creating detailed incident reports include: \n- Use a standardized format to document critical details like what happened, the impact, root cause, supporting data (metrics, graphs, etc.), and implications for security and other pillars. \n- Capture a detailed timeline of events, including actions taken by operators/engineers, alarms raised, runbooks/automations initiated, and time to resolution. \n- Avoid citing human error or naming individuals, as this can discourage honest reporting. Focus on the conditions and events that led to the incident. \n- Store reports in a central repository accessible to the entire organization for learning and training purposes.\nThe reports can be used for activities like: - Training new operators by walking through past incident timelines \n- Conducting game days or chaos experiments based on real incident scenarios \n- Helping teams anticipate and prepare for potential failures by studying past incidents - Building an institutional knowledge base of lessons learned from incidents across the organization.\n\nSource: \nhttps://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/resilience-lifecycle-framework/resilience-lifecycle-framework.pdf\nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-LE-C-RMSL",
+    "Description": "How complete are the reports you complete after an incident?",
+    "Level 1": "Basic details: Reports include high-level status and details on outages. Event report formats are standardized, not giving space for document and learn from specific situations. ",
+    "Level 2": "Key metrics and analysis: In addition to status, reports analyze trends in metrics like error rates and correlate incidents to potential causes and other events that could have influenced. Event reports include answers to open ended questions. For example, the report can identify response time increases correlated to specific deployments. ",
+    "Level 3": "Comprehensive actionability: Event reports are quantitative. Reports incorporate multiple data sources for full visibility and predictive analysis to prevent future issues. For example, a report combining metrics, logs and code quality to propose targeted reliability improvements. ",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-LE-C-PEOD",
+    "Description": "How are teams trained to generate reports?",
+    "Level 1": "Team learn how to complete reports based on instructions (documented with the templates or in a knowledge base).",
+    "Level 2": "Teams are trained in workshops to generate reports.",
+    "Level 3": "Teams are trained using shadow/reverse shadow tecniques in real-world reports.",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-LE-C-RMSL",
+    "Description": "How complete is your repository of reports?",
+    "Level 1": "High severity incident reports are stored",
+    "Level 2": "All incident reports are stored",
+    "Level 3": "All event reports are stored",
+    "Comments / Notes": "Is an event report database maintained and does it contain the results of incidents, near misses, chaos experiments, and game days?",
+    "References": ""
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-LE-C-RMSL",
+    "Description": "How accessible is your report's repository?",
+    "Level 1": "Repository is only accessible to selected personnel.",
+    "Level 2": "Report is accesible to all application team. ",
+    "Level 3": "Reports are accessible and communicated to other application teams. ",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-RE-R-APCR",
+    "Description": "How do you handle communications in case of an incident? ",
+    "Level 1": "Teams have a tribal knowledge of who to report, and what information to provide.",
+    "Level 2": "Runbooks contain clear information about communication channels, roles, responsibilities, and information to share.",
+    "Level 3": "Communication channels are automatically established. Indicators are automatically raised and shared with the relevant personnel.",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-RE-R-APCR",
+    "Description": "How do you inform your customers and relevant third parties about incidents involving your application?",
+    "Level 1": "Communication is reactive, initiated when an external party detects an issue and requests information, or it occurs only after the event has been resolved.",
+    "Level 2": "Proactive general status updates: The application team provides information about incidents from detection to resolution. Communication is facilitated through standard channels, such as a status page or dashboard. This form of communication helps prevent the spread of misinformation during an incident.",
+    "Level 3": "Personalized engagement involves a set process that determines when, to whom, what information, by whom, and through which channels communication should occur. For instance, Technical Account Managers keep Enterprise support customers updated until issues are resolved. Communication can occur through various channels like email, text, and push notifications. This approach helps prevent misinformation by tailoring the level of information to the needs of the external audience.",
+    "Comments / Notes": "Tailored and time-relevant communications help external parties to understand the impact and analyze their own response actions, increasing the overall resilience posture. \n",
+    "References": "Some best practices for communicating incidents to customers and third parties include: \n- Define roles and responsibilities, such as designating a communications manager to coordinate all external and internal communications. \n- Identify communication channels like email, SMS, social media, in-app notifications, and status pages that are resilient and can operate independently during incidents. \n- Develop templates for various incident scenarios, emphasizing simplicity and essential details like the service impact and expected resolution time. \n- Communicate quickly, clearly, and regularly through channels like Amazon Pinpoint for push notifications, Amazon SNS for programmatic alerts, and public CloudWatch dashboards. - Actively monitor and engage on social media to understand customer sentiment and provide public updates.\nOther recommended practices include: \n- Coordinate internal communication using tools like AWS Chatbot and CloudWatch dashboards. \n- Implement feedback mechanisms to assess the effectiveness of communications during incidents. \n- Continually evolve the communication plan based on feedback and changing needs. - Establish protocols for escalating incidents and notifying on-call personnel.\n\nSource:\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/operational-excellence-pillar/wellarchitected-operational-excellence-pillar.pdf?did=wp_card&trk=wp_card"
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-LE-R-PEOO",
+    "Description": "Does the team own the incident management process that they use?",
+    "Level 1": "The process for managing incidents is documented and overseen by a centralized operations team",
+    "Level 2": "A member of the application team is responsible for implementing and adapting the centralized incident management process within the team.",
+    "Level 3": "A procedure exists for the application team to provide feedback on improvements based on their experience to the centrally managed process.",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "Incident Management",
+    "ADType": "IM-RE-R-PEOO",
+    "Description": "Does an appointed member of the response team have authority to act when outcomes are at risk?",
+    "Level 1": "A central authority is appointed and available during incidents if decisions need to be made.",
+    "Level 2": "A central authority is appointed and is actively involved in incident management.",
+    "Level 3": "An application team member involved in incident management is appointed who has permission to take the action necessary to ensure outcomes.",
+    "Comments / Notes": "",
+    "References": "An incident response plan should clearly define the roles and responsibilities of the incident response team, including their authority to take action when outcomes are at risk. The plan should outline the phases of incident response (e.g. detect, analyze, contain, eradicate, recover) and the specific actions the team is authorized to take during each phase to mitigate risks and protect key outcomes.\nThe incident response plan should also establish incident severity and prioritization definitions. This allows the team to escalate their response actions appropriately based on the level of risk to organizational outcomes. Higher severity incidents may grant the incident response team greater authority to take immediate containment or recovery actions to protect critical systems and data."
+  },
+  {
+    "Activity": "Organizational Learning",
+    "ADType": "OL-LE-F-PEOO",
+    "Description": "How are you fostering a community to support resilience efforts and enhancements?",
+    "Level 1": "Informal. Individuals interested in resilience engage in discussions on unplanned channels.",
+    "Level 2": "Formal channels exist for discussing resilience-related topics, with a leading role moderating the conversations.",
+    "Level 3": "A formal community exists  with a core team. There's a process in place for joining the community. The core team is actively seeking methods to enhance knowledge and provide opportunities for growth.",
+    "Comments / Notes": "",
+    "References": "To foster a community that supports resilience efforts and enhancements, Amazon Web Services (AWS) takes the following approach:\n1. Cultivate a Culture of Resilience:\n   - AWS promotes a culture where resilience is a shared responsibility across the organization, from leadership to individual contributors.\n   - This culture encourages proactive identification and mitigation of risks, as well as a mindset of continuous improvement.\n2. Provide Educational Resources:\n   - AWS offers a wide range of educational resources, such as whitepapers, webinars, and training courses, to help customers and the broader community learn about best practices for building resilient systems on AWS.\n   - These resources cover topics like disaster recovery, fault tolerance, and incident response planning.\n3. Facilitate Knowledge Sharing:\n   - AWS hosts various community events, such as re:Invent, AWS Summits, and AWS User Groups, where customers can share their experiences, challenges, and solutions related to building resilient architectures.\n   - These events provide opportunities for networking, collaboration, and learning from peers and AWS experts.\n4. Engage with Customers and Partners:\n   - AWS actively engages with customers and partners to understand their resilience-related needs and pain points.\n   - This feedback is used to inform the development of new services, features, and best practices that address the evolving resilience requirements of the community.\n5. Contribute to Open-Source Initiatives:\n   - AWS participates in and contributes to open-source projects and industry standards related to resilience, such as the Chaos Engineering community and the Chaos Toolkit.\n   - This collaboration helps advance the state of the art in resilience engineering and fosters a broader ecosystem of tools and practices.\n6. Provide Resilience-Focused Support:\n   - AWS offers dedicated support and professional services to help customers design, implement, and validate resilient architectures on AWS.\n   - This includes assistance with incident response planning, disaster recovery testing, and the implementation of resilience best practices.\n\nSources:\nhttps://community.aws/content/2ZS3yXllv0J6SvRqxaq3IAERkEX/how-to-build-resilience-one-step-at-a-time"
+  },
+  {
+    "Activity": "Organizational Learning",
+    "ADType": "OL-LE-F-PEOO",
+    "Description": "How are you defining roles and responsibilities for resilience?",
+    "Level 1": "Resilience is not specifically defined as a prerequisite for the application. Team members apply their best effort to enhance the app's resilience.",
+    "Level 2": "The application team has a resilience champion. This individual provides guidance when making decisions related to resilience.",
+    "Level 3": "Resilience is a collective responsibility. Each team has a resilience champion who receives guidance from a central resilience team. A specific role within the organization is tasked with managing resilience. There is a distinct stakeholder accountable for resilience part of  the application team.",
+    "Comments / Notes": "",
+    "References": "Establishing clear roles and responsibilities for resilience within the organization is crucial.\nLeaders should foster a culture of resilience and ensure that best practices are integrated into everyday work.\nGovernance processes should include feedback loops from customers to continuously improve the resilience of the system.\n\nSource:\nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/shared-responsibility-model-for-resiliency.html\nhttps://community.aws/content/2ZS3yXllv0J6SvRqxaq3IAERkEX/how-to-build-resilience-one-step-at-a-time\nhttps://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-workloads-on-aws/shared-responsibility-model-for-resiliency.html"
+  },
+  {
+    "Activity": "Organizational Learning",
+    "ADType": "OL-LE-F-PEOD",
+    "Description": "How are you keeping your team up-to-date about resilience concepts and implementations?",
+    "Level 1": "There is a common knowledge base. Teams are free to consult and consume information.",
+    "Level 2": "Periodic knowledge assessment about resilience concepts (resilience awareness).",
+    "Level 3": "Regular evaluation of knowledge deficiencies is carried out, followed by the implementation of enablement activities to bridge these gaps. This assessment is conducted whenever major modifications are made to the application or its environment.",
+    "Comments / Notes": "",
+    "References": "To keep your team up-to-date about resilience concepts and implementations on AWS, consider the following approaches:\n1. Continuous Education and Training:\n   - Provide regular training sessions, workshops, and lunch-and-learn events to educate your team on the latest resilience best practices, tools, and services offered by AWS.\n   - Encourage team members to attend AWS-hosted events, such as re:Invent, AWS Summits, and AWS User Group meetings, to stay informed about the latest resilience-related announcements and industry trends.\n   - Leverage AWS-provided educational resources, such as whitepapers, webinars, and online courses, to help your team deepen their understanding of resilience engineering principles.\n2. Knowledge Sharing and Collaboration:\n   - Establish a resilience-focused community of practice within your organization, where team members can share their experiences, challenges, and solutions related to building resilient systems on AWS.\n   - Encourage team members to contribute to open-source projects and industry initiatives related to resilience, such as the Chaos Engineering community, to stay engaged with the broader ecosystem.\n   - Organize internal hackathons or game days to foster a culture of experimentation and continuous improvement around resilience.\n3. Resilience Champions and Mentorship:\n   - Identify and empower resilience champions within your team, who can act as subject matter experts and advocates for resilience best practices.\n   - Implement a mentorship program to pair experienced team members with newer hires, enabling knowledge transfer and skill development in the area of resilience engineering.\n4. Feedback Loops and Continuous Improvement:\n   - Establish regular feedback mechanisms, such as retrospectives and post-incident reviews, to capture lessons learned and identify areas for improvement in your resilience practices.\n   - Incorporate customer feedback and insights from the broader AWS community to continuously refine your resilience strategies and implementation.\n   - Regularly review and update your team's resilience-related documentation, runbooks, and playbooks to ensure they remain relevant and effective.\n5. Resilience Metrics and Reporting:\n   - Define and track key resilience metrics, such as mean time to recovery (MTTR), error budgets, and availability, to measure the effectiveness of your resilience efforts.\n   - Regularly report on these metrics to your team and leadership, fostering a data-driven approach to resilience management.\n\nSources\nhttps://community.aws/content/2e3Cmvwn4qeBO8kVIMg5uDz6JJZ/whose-job-is-it-anyway\n[FSIREL02 - Financial Services Industry Lens https://docs.aws.amazon.com/wellarchitected/latest/financial-services-industry-lens/fsirel02.html"
+  },
+  {
+    "Activity": "Organizational Learning",
+    "ADType": "HA-LE-F-PEOD",
+    "Description": "How are you customizing resilience training to suit your unique circumstances?",
+    "Level 1": "Tribal knowledge",
+    "Level 2": "Formal training encompasses general concepts. The team is kept  up-to-date of the latest best practices. For instance, when using AWS, the team is updated on resilience best practices and concepts such as control-plane versus data-plane.",
+    "Level 3": "Training is tailored to the application, encompassing specific details and lessons learned from previous incidents.",
+    "Comments / Notes": "",
+    "References": "To customize resilience training to suit your unique circumstances, consider the following approaches:\n1. Assess your organization's resilience maturity:\n   - Evaluate your current resilience capabilities, challenges, and pain points through assessments and stakeholder interviews.\n   - Identify the specific resilience-related skills and knowledge gaps within your team.\n2. Tailor the training content:\n   - Develop training modules and materials that address the unique resilience requirements of your applications, infrastructure, and operational processes.\n   - Incorporate real-world examples, case studies, and hands-on exercises that are relevant to your business context.\n3. Leverage AWS-provided resources:\n   - Utilize the resilience-focused educational resources available from AWS, such as whitepapers, webinars, and online courses.\n   - Adapt these resources to align with your organization's specific needs and deployment patterns on the AWS Cloud.\n4. Incorporate hands-on exercises:\n   - Design and implement resilience testing scenarios, such as chaos engineering experiments and failure injection tests, that are tailored to your application architecture and infrastructure.\n   - Provide opportunities for your team to practice incident response, disaster recovery, and other resilience-related procedures.\n5. Emphasize continuous learning:\n   - Establish a resilience-focused community of practice within your organization, where team members can share their experiences, challenges, and solutions.\n   - Encourage team members to participate in AWS-hosted events and contribute to open-source resilience initiatives to stay informed about the latest trends and best practices.\n6. Align with organizational goals and KPIs:\n   - Ensure that the resilience training aligns with your organization's strategic objectives, such as availability targets, recovery time objectives, and cost optimization goals.\n   - Incorporate resilience-related metrics and key performance indicators (KPIs) into your training program to measure the effectiveness of the training and drive continuous improvement.\nSources:\nCreating resiliency policies - AWS Resilience Hub:  https://docs.aws.amazon.com/resilience-hub/latest/userguide/create-policy.html\nExperiment with failure using resilience testing to build recovery preparedness - DevOps Guidance:  https://docs.aws.amazon.com/wellarchitected/latest/devops-guidance/qa.nt.6-experiment-with-failure-using-resilience-testing-to-build-recovery-preparedness.html\nResilience lifecycle framework: https://docs.aws.amazon.com/prescriptive-guidance/latest/resilience-lifecycle-framework/introduction.html"
+  },
+  {
+    "Activity": "Organizational Learning",
+    "ADType": "IM-LE-F-PEOD",
+    "Description": "Do you track if and how teams in your organization are using the report repository for learning purposes?",
+    "Level 1": "Qualitative feedback is gathered to assess the level of team engagement with the repository and the benefits they derive from it",
+    "Level 2": "Metrics on access are gathered, including daily visits, monthly report reviews, and visitor categories (such as manager, senior engineer, engineer, etc)",
+    "Level 3": "User satisfaction surveys are conducted to understand the usage of the repository and to identify features that could be advantageous to the teams.",
+    "Comments / Notes": "",
+    "References": "To track the utilization of an incident report repository for learning, it is recommended to: \n1. Store incident reports in a central, easily searchable repository that is accessible to all engineers and operations teams within the organization. \n2. Capture metrics on how frequently the repository is accessed, by which teams/individuals, and what reports or types of incidents are being viewed. This can help identify areas of high interest or knowledge gaps that need to be addressed. \n3. Encourage teams to use the incident reports as training material or scenarios for game days, chaos experiments, and other learning activities. Track which reports are being used for these purposes to understand their educational value.\n4. Solicit feedback from teams on the usefulness and completeness of the incident reports. Identify any areas where the reports could be improved to better facilitate learning. \n5. Promote the incident knowledge base and highlight interesting or high-impact incidents to drive awareness and utilization across the organization\nSource:\nhttps://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/resilience-lifecycle-framework/resilience-lifecycle-framework.pdf "
+  },
+  {
+    "Activity": "Organizational Learning",
+    "ADType": "IM-LE-F-RMSL",
+    "Description": "How are the insights gained from incidents applied to prevent similar occurrences in the future?",
+    "Level 1": "Reports are used to update guidance and readiness checklists",
+    "Level 2": "Patterns and libraries are created to prevent trends",
+    "Level 3": "Training programs are developed to equip teams with strategies to prevent recurring trends. Other application teams implement the lessons learned for their respective applications",
+    "Comments / Notes": "",
+    "References": "Some best practices for applying insights from incident reports to prevent future incidents include: \n1. Maintain a centralized repository or knowledge base of incident reports and lessons learned. This allows teams across the organization to access and learn from past incidents.\n2. Share findings and insights from post-incident analyses openly within the organization, such as through open meetings to discuss lessons learned.\n3. Use incident reports as training material or scenarios for game days and chaos experiments to improve teams' ability to troubleshoot and respond to incidents.\n4. Ensure the post-incident analysis process is blameless to promote honest self-assessment and collaboration in identifying root causes and preventative actions.\n\nSource:\nhttps://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/resilience-lifecycle-framework/resilience-lifecycle-framework.pdf\nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+  },
+  {
+    "Activity": "Organizational Learning",
+    "ADType": "OL-LE-R-PEOD",
+    "Description": "How do you incorprate learnings from an incident trend analysis? ",
+    "Level 1": "Reports are searched periodically to update guidance and readiness checklists",
+    "Level 2": "Patterns and libraries are created to prevent trends",
+    "Level 3": "Training is available to prevent trends",
+    "Comments / Notes": "",
+    "References": "(Mau) Moved this question from the Organizational Learning tab.  I think we can remove it as it is closely related with the previous. I don't think it will create much more value to the evaluation."
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-MO-C-APCD",
+    "Description": "How are you defining the indicators (logs, metrics, traces, and alarms) for your application?",
+    "Level 1": "Application indicators are the indicators provided by default by the components. Usually logs and metrics. ",
+    "Level 2": "New indicators (metrics and alerts) are consistently derived from logs, and created based on the application context. For example, Logs are parsed into metrics (using CloudWatch and Embedded Metric Format) and alarms are defined when metrics reach a threshold.",
+    "Level 3": "Traces, for end-to-end user journeys. Logs and traces are correlated with a request ID in logs. Indicators are created and updated based on anticipated failure modes.",
+    "Comments / Notes": "",
+    "References": "Application tracing is a way to monitor and visualize requests as they traverse through various components of a distributed system. By capturing trace data from multiple sources and analyzing it in a unified view, teams can better understand how requests flow, where bottlenecks exist, and where optimization efforts should focus. Tracing makes it easy to visually identify root causes, reducing the time spent investigating issues. Teams that understand component interactions in detail can make better and faster decisions when resolving issues, such as when to invoke disaster recovery failover or where to implement self-healing strategies, ultimately improving customer satisfaction.\n\n To link logs and traces with request IDs, teams should use tracing tools to establish a correlation identifier and collect traces of requests across all application components, including service clients, middleware gateways, event buses, compute components, storage systems like databases, and key-value stores. Real-user monitoring and synthetic canaries should also be included in the end-to-end tracing configuration to measure remote client interactions and latency, allowing teams to evaluate system performance against service level agreements and objectives.\n\nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html\n\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/framework/wellarchitected-framework.pdf"
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-MO-C-APCD",
+    "Description": "How are you making your logs available and usable?",
+    "Level 1": "All component logs are stored centrally",
+    "Level 2": "Logs are stored centrally with consistent timestamps",
+    "Level 3": "The centralized logs can be mined using a query engine.",
+    "Comments / Notes": "Early stages involve storing collected logs in a central location for retrieval. This provides basic searchability, however it lacks context and require considerable effort to analyze. In the next stage logs are parsed and structured into a common format to facilitate analysis. This may involve adding semantic context through log enrichment. Finally, providing a querying capability on top of the central logs will facilitate human investigation in case of incidents.\n",
+    "References": "To ensure logs and telemetry are accessible and functional, it is recommended to: \n1. Establish a standardized logging solution to collect and query log data and events from across your environments. This improves insights derived from the log information. \n2. Configure automated lifecycle management for the collected log data to reduce storage costs. \n3. Implement fine-grained access controls for the log data based on data sensitivity and team access requirements. \n4. Integrate tooling to correlate, visualize, and derive insights from the log data. Additionally, it is important to: \n1. Select and enable relevant log sources for your workloads ahead of time to enable retroactive reconstruction of activity during security investigations.\n 2. Capture logs, findings, and metrics in standardized locations to streamline analysis and simplify tool integrations. \n3. Govern security logs, findings, and metrics as part of your data classification policy. \n4. Consider data sovereignty and localization requirements when configuring data collections\n\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/framework/wellarchitected-framework.pdf\n"
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-MO-C-APCD",
+    "Description": "Are your logs formatted to allow easy querying and data extraction?",
+    "Level 1": "Logs are generated with message type (ERROR / DEBUG / INFO / WARN)",
+    "Level 2": "Logs are generated with a structured format",
+    "Level 3": "Log format is structured and consistent across components.",
+    "Comments / Notes": "",
+    "References": "Some best practices for collecting and accessing log data include: \n1. Implement a standardized logging solution to collect and query log data from various sources. This improves insights derived from the log information. \n2. Capture security logs, findings, and metrics in standardized locations. This allows for efficient correlation, analysis, and visualization of security data across systems to identify potential security events and anomalies. \n3. Integrate security information and event management (SIEM) systems or other mechanisms to query and analyze log data for timely response, tracking, and escalation of security events.\n4. Periodically review and refine your log analysis strategies to capture all relevant information and continually optimize application performance and security. \n5. Leverage automation and querying capabilities for log analysis instead of solely relying on manual review. This enables proactive issue detection and mitigation.\n\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/operational-excellence-pillar/wellarchitected-operational-excellence-pillar.pdf"
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-MO-C-APCD",
+    "Description": "How are you using traces to get information from your application?",
+    "Level 1": "Tracing for some user journeys or partial user journeys.",
+    "Level 2": "Tracing is consistently implemented across the application",
+    "Level 3": "An analysis is conducted to identify all the tracing that should be enabled, and metrics are automatically reported and analyzed.",
+    "Comments / Notes": "",
+    "References": "Implementing distributed tracing is a best practice for monitoring and optimizing the performance of distributed applications. It allows you to track requests as they flow through various components of your system, identify bottlenecks, and pinpoint the root causes of errors or latency issues. To effectively Implement distributed tracing: \n1. Instrument all components of your application to send trace data, including AWS Lambda functions, EC2 instances, and any third-party services. The more components you instrument, the more complete your end-to-end view will be.\n2. Adopt a tracing tool like AWS X-Ray and integrate it into your application. X-Ray provides insights into application behavior, performance analysis, and automatic trace analysis with X-Ray Insights. \n3. Configure synthetic canaries and real-user monitoring to capture client interaction telemetry and measure performance against your service level objectives. \n4. Regularly review trace data with developers and use tools like Amazon DevOps Guru, X-Ray Analytics, and X-Ray Insights to uncover deeper findings and optimize your system."
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-MO-D-APCD",
+    "Description": "How are you using synthetic traffic to monitor your application?",
+    "Level 1": "Test users and transactions exist for troubleshooting",
+    "Level 2": "Synthetic traffic periodically tests the system through interaction",
+    "Level 3": "Scripted system interaction tests are used to evaluate complete user stories",
+    "Comments / Notes": "",
+    "References": "Synthetic transactions are recommended as a best practice for monitoring applications. They simulate user interactions and help detect potential issues before they impact real users. Some key benefits of using synthetic transactions include: \n1. Proactive issue detection by testing critical application paths and functions that may not be frequently used by typical users. \n2. Checking application functionality even when there are no real users actively using the application.\n3. Validating that core business workflows remain operational and efficient.\n In addition to synthetic transactions, real user monitoring (RUM) is also recommended as a complementary tool. RUM provides data about actual user interactions and experiences, giving an unfiltered perspective of user satisfaction. Together, synthetic transactions and RUM provide a holistic view of the customer experience, enabling proactive issue detection and optimization of user interactions."
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-RE-C-APCD",
+    "Description": "How are you aligning your indicators  to failure domains?",
+    "Level 1": "Indicators are aligned to individual components. Example: a)For a database, collect indicators like query response time, storage utilization per node.\nb) For a frontend fleet, collect error rate, request volume, memory usage per node.\nThis helps pinpoint issues at the component level.",
+    "Level 2": "Indicators are aligned with service layers. For instance, a) Feature service level (such as page load time). b) Indicators that gauge the attainment of objectives like backend response time, frontend errors. While this demonstrates the impact on customer experience, it doesn’t enable the identification of a specific cause of failure within the layer.",
+    "Level 3": "Indicators are aligned to fault isolation boundaries. For instance a) Collecting data at the Availability Zone level (when AZ are used as isolation boundaries) , b) Collect indicators showing performance per cell (when implementing a cell-based architecture).\nThis helps identify the Fault Isolation Boundary (FIB) experiencing an issue, when a problem is contained at a FIB level.",
+    "Comments / Notes": "",
+    "References": "Aligning metrics to fault isolation boundaries involves understanding the different isolation boundaries and how they can be used to create zonal, regional, and global services. Here are some steps to align metrics with these boundaries:\n\n1. Understand AWS Isolation Boundarie: AWS provides different isolation boundaries such as Availability Zones (AZ), Regions, control planes, and data planes. Understanding these boundaries is crucial for aligning metrics.\n\n2. Identify the Scope of Services: AWS provides services at different scopes: zonal, regional, and global. Identify which scope your service falls under and align your metrics accordingly.\n\n3. Use Appropriate Metrics for Each Boundary: For instance, if you're using Availability Zones as your isolation boundaries, collect data at the Availability Zone level. If you're implementing a cell-based architecture, gather indicators showing performance per cell.\n\n4. Consider Dependencies: Consider dependencies on different services and how they can impact the resilience of the workloads you build. This can help you align your metrics more effectively.\n\nThe goal is to design your workloads to take advantage of the predictable scope of impact containment these boundaries provide. This will help you make informed choices about your AWS dependencies and design your workload for high availability (HA) and disaster recovery (DR)¹.\n\nAWS Fault Isolation Boundaries - AWS Whitepaper. https://docs.aws.amazon.com/pdfs/whitepapers/latest/aws-fault-isolation-boundaries/aws-fault-isolation-boundaries.pdf"
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-MO-C-APCD",
+    "Description": "What methods do you use to track and maintain metrics related to your application's availability (such as success rate) and latency?",
+    "Level 1": "Metrics are gathered partially: Fundamental measurements such as the overall success rate and mean response time for the entire application or frontend are monitored. For instance, tracking the percentage of requests that yield 2xx status codes across key APIs. This offers a restricted view",
+    "Level 2": "Gathered for certain internal components of the application: Metrics are categorized by area of concern, service, or endpoint. Latency is divided by individual operations. For instance, monitoring the success rate and latency for various backend services and significant user paths. This offers an expanded view of the application’s availability and latency",
+    "Level 3": "Gathered for all components: Metrics are collected  for each conceivable division, such as per API endpoint, database query, and frontend operation. For instance, establishing latency budgets and observing each stage of a signup process from the user interface to the database. This allows for a thorough understanding of the application’s resilience performance",
+    "Comments / Notes": "",
+    "References": "To maintain metrics on availability and latency of your application, you should: \n1. Collect operational metrics such as the number of incidents by severity per month, time to detect incidents, time to identify the cause, time to remediate, and the number of tickets/alerts raised. Review these metrics regularly (e.g. monthly) to understand the burden on operational staff and signal-to-noise ratio. This helps track availability and identify areas for improvement. \n2. Measure availability as the percentage of time the application is available over a defined period, typically expressed as \"nines\" (e.g. 99.99% availability). Set appropriate availability targets for each workload based on its criticality.\n3. Measure latency as the time taken for the system to process a given task, from when a request is made to when a response is received. Use metrics like percentiles and trimmed mean to gain insights into application responsiveness and user experience. \n4. Implement observability and instrumentation to reduce mean time to detection (MTTD) and mean time to repair (MTTR), which directly impact availability.\n\nhttps://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/resilience-lifecycle-framework/resilience-lifecycle-framework.pdf\n\nhttps://docs.aws.amazon.com/pdfs/whitepapers/latest/aws-multi-region-fundamentals/aws-multi-region-fundamentals.pdf \n\nREL11-BP07 https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_withstand_component_failures_service_level_agreements.html"
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-MO-D-APCD",
+    "Description": "Has your team identified key performance indicators that measure the success of your system?",
+    "Level 1": "Key performance indicators are defined and derived periodically from logs and metrics.",
+    "Level 2": "Key performance indicators are actively measured in near-real time like other indicators.",
+    "Level 3": "Alarms exist to detect fluctuation in key performance indicators.",
+    "Comments / Notes": "(Mau) Removed as it was already covered in the \"Indicator domains\" question.",
+    "References": ""
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-MO-D-APCD",
+    "Description": "What domains do your indicators (like logs, metrics, traces, and alarms) report on?",
+    "Level 1": "Telemetry primarily about the technical performance of your workload, such as error rate, response time, or the status of CPU/memory for internal components",
+    "Level 2": "Beyond the telemetry of the workload, you also offer indicators for user activity, such as perceived response time",
+    "Level 3": "In addition to the telemetry from the previous level, you supply telemetry related to system functions (like the number of orders placed or shopping carts abandoned, in the case of an e-commerce application), as well as Key Performance Indicators for the business.",
+    "Comments / Notes": "",
+    "References": "Application telemetry provides metrics that offer insights into workload performance, user activity, and system functions. Some key metrics include: - Latency, requests, errors, and capacity metrics provide insights into system performance. - Business outcome metrics help measure the impact of the workload on business objectives. - Real user monitoring (RUM) metrics track user activity and experience. - Metrics related to data processing latency, cost efficiency, and anomaly detection rate help monitor the telemetry system itself.\n\nOPS04-BP01, OPS04-BP02 Implement and configure workload telemetry \nOPS04-BP03 Implement user activity telemetry\nOPS04-BP04 Implement dependency telemetry\nOPS04-BP05 Implement transaction traceability https://docs.aws.amazon.com/wellarchitected/latest/framework/ops_observability_application_telemetry.html"
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "RA-MO-D-APCD",
+    "Description": "How do you define and monitor the availability of your dependencies?",
+    "Level 1": "No metrics established for dependencies's availability.",
+    "Level 2": "Metrics established but not monitored.",
+    "Level 3": "Dependencies' metrics are monitored and alarmed in case of failure",
+    "Comments / Notes": "An application that monitor the status of its dependencies, and take action in case of failure is better prepared to deal with impairments.",
+    "References": ""
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-MO-C-APCD",
+    "Description": "How are you monitoring your dependencies, and alerting when they aren't meeting your needs?",
+    "Level 1": "Partially coverage of dependency's availability and latency.",
+    "Level 2": "All critical dependencies are monitored.",
+    "Level 3": "All dependencies are monitored.",
+    "Comments / Notes": "",
+    "References": "To effectively monitor dependencies and alert when they are impaired, the key steps are: \n1. Identify all external dependencies your workload relies on, such as external databases, third-party APIs, network connectivity, and DNS services. \n2. Develop a monitoring strategy tailored to each dependency, understanding its criticality, expected behavior, and any associated service-level agreements or targets. Set up proactive alerts to notify you of status changes or performance deviations. \n3. Use tools like AWS X-Ray to instrument your application and gain insights into how dependencies are performing. AWS Internet Monitor and Network Monitor can also provide visibility into global internet and network conditions affecting dependencies. \n4. Stay informed of any AWS service events that may impact your dependencies by monitoring the AWS Health Dashboard and setting up rules or programmatic integration.\nWhen dependencies fail or become impaired, it's important to degrade gracefully. Some strategies include: \n- For partial dependency failures, handle requests differently based on business context (e.g. fail, retry, load from cache). \n- If a downstream system is overloaded, use circuit breakers to stop sending requests and avoid compounding the issue. \n- If a parameter store is unavailable, use cached values or sane defaults included in container images. \n- For non-critical dependencies like monitoring services, continue executing core business functions. \n\nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-MO-D-APCD",
+    "Description": "When do your indicators, such as logs, metrics, traces, and alarms, provide information about a failure scenario?",
+    "Level 1": "Failure scenarios only have Lagging indicators",
+    "Level 2": "Some failure scenarios have Leading indicators",
+    "Level 3": "All failure scenarios that can have leading indicators have Leading indicators",
+    "Comments / Notes": "Drive customers to have both leading and lagging indicators for their anticipated threats.",
+    "References": "To configure logs, metrics, traces, and alarms for monitoring your  application: \n1. Instrument your application to generate logs, metrics, and traces from different layers like devices, connectivity, message rates, provisioning, authorization, and data routing. This provides visibility into the application's state and interactions with dependencies. \n2. Use Amazon CloudWatch to collect and analyze logs, metrics, and traces. You can embed custom metrics in logs using the CloudWatch Embedded Metric Format for near real-time incident detection and visualization. \n3. Consider open-source options like AWS Distro for OpenTelemetry to collect metrics and traces from various sources like EC2, Lambda, ECS, EKS, and on-premises infrastructure, and send them to services like X-Ray and CloudWatch. \n4. Create alarms and notifications for your metrics to proactively respond to performance-related issues. Use CloudWatch anomaly detection to create alarms for custom metrics. \n5. Load test your workloads regularly to validate scaling and resilience. Identify key metrics that correlate with capacity constraints and customer outages during these load tests. \n6. Implement controls that alert on the absence of monitoring data, as missing data can indicate an underlying issue. Treat missing data as a potential security breach and raise alarms accordingly.\n\nhttps://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/resilience-lifecycle-framework/resilience-lifecycle-framework.pdf\n\nhttps://docs.aws.amazon.com/pdfs/whitepapers/latest/aws-caf-operations-perspective/aws-caf-operations-perspective.pdf\n\nhttps://docs.aws.amazon.com/wellarchitected/latest/financial-services-industry-lens/financial-services-industry-lens.html\n\nhttps://docs.aws.amazon.com/wellarchitected/latest/iot-lens/abstract-and-introduction.html"
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-MO-D-APCD",
+    "Description": "How are you selecting which alarms to implement in your application?",
+    "Level 1": "Alarms are defined in accordance with general organizational monitoring guidelines. While this sets a baseline, it may not be customized to the particular application",
+    "Level 2": "Alarms are set at the component level, based on default resource thresholds. This approach focuses on individual elements but does not consider interactions between components",
+    "Level 3": "Alarms are aligned with the scenarios from resilience modeling and metrics analysis specific to the application. Both normal and failure behaviors are used to dynamically set sensitive thresholds that detect issues across the full application system.",
+    "Comments / Notes": "",
+    "References": "\"Choosing which alarms to incorporate into your application on AWS involves several steps:\n\n1. Understand Your Application: Understand the key performance indicators (KPIs) of your application and identify the metrics that directly impact these KPIs.\n\n2. Use AWS CloudWatch: AWS CloudWatch allows you to collect, track, and analyze metrics from your AWS resources and applications. You can create metric and composite alarms in Amazon CloudWatch.\n\n3. Define Alarms Based on Metrics: Identify the metrics that are important for your application's performance and reliability. These could include error rates, response times, or resource utilization metrics.\n\n4. Set Thresholds: Define thresholds for these metrics that, if crossed, would indicate a problem or a potential problem.\n\n5. Configure Alarm Actions: Determine what actions should be taken when an alarm state is triggered. This could include sending a notification, performing an Amazon EC2 action, or creating an OpsItem or incident in Systems Manager.\n\n6. Use Composite Alarms: Composite alarms include a rule expression that takes into account the alarm states of other alarms that you have created. Using composite alarms can reduce alarm noise.\n\n7. Monitor and Adjust: Regularly review your alarms and adjust as necessary based on the changing needs and performance of your application.\n\nRemember, the goal is to ensure that your alarms provide meaningful and actionable insights into the performance and health of your application.\n\nUsing Amazon CloudWatch alarms - Amazon CloudWatch. https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/AlarmThatSendsEmail.html.\nSetting Up CloudWatch Alarms: A Step-by-Step Guide to AWS Monitoring .... https://cloudpatterns.org/cloudwatch-alarms/.\nAWS Cloudwatch Alarm Setup Tutorial | Step by Step. https://www.youtube.com/watch?v=lHWrAAzoxJA.\nWhat is AWS CloudWatch? Metric | Alarms | Logs Custom Metric. https://www.youtube.com/watch?v=G4_ay2_h9GI.\nAWS Cloudwatch Composite Alarms Tutorial. https://www.youtube.com/watch?v=12qBmWu8Si0.\nBest practice alarm recommendations for AWS services. https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Best-Practice-Alarms.html.\nAlarming on metrics - Amazon CloudWatch. https://docs.amazonaws.cn/en_us/AmazonCloudWatch/latest/monitoring/Alarm-On-Metrics.html\""
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-MO-D-APCD",
+    "Description": "How adaptive are your alarm thresholds?",
+    "Level 1": "Static: Alarms are triggered when an indicator exceeds a static threshold. This relies solely on hard-coded thresholds without context, so issues may be missed or cause false alarms.",
+    "Level 2": "Static progressive: Alarms are triggered when an indicator exceeds a static threshold for a period of time (or M of N occurrences). This adds an evaluation element to help filter transient spikes and detect sustained problems more effectively.",
+    "Level 3": "Adaptive alarms: Alarms are triggered when an indicator exhibits anomalous behavior compared to a dynamic/adaptive threshold. Machine learning analyzes historical metrics to establish highly sensitive, context-aware thresholds based on normal system behavior patterns. This detects even minor deviations that could signal future issues.",
+    "Comments / Notes": "Adaptive thresholds allows to include contextual information when triggering alarms, positively influencing the resilience posture of an application.",
+    "References": "Adaptive alarms in AWS are crucial for effective system monitoring and management for several reasons:\n\n1. Anomaly Detection: Adaptive alarms can detect unusual system behavior by comparing metrics against dynamic thresholds. This allows for the identification of even minor deviations that could indicate potential future issues.\n\n2. Context-Aware Monitoring: These alarms use machine learning to analyze past metrics and establish highly sensitive, context-aware thresholds based on normal system behavior patterns.\n\n3. Proactive Problem Solving: By setting up alarms based on your business logic and adhering to best practices such as keeping AWS service limits in mind, you can effectively monitor your system and take action when necessary.\n\n4. Automated Notifications: With the help of SNS, CloudWatch Alarms can send personalized notifications to inform you of any changes in your system's state.\n\n5. Best Practice Compliance: AWS provides out-of-the-box alarm recommendations that can help you identify the metrics that you should set alarms for to follow best practices for monitoring¹.\n\nBy setting adaptive alarms, you can get notified about system errors before your customers experience them, thereby maintaining a high-quality user experience.\n\nBest practice alarm recommendations for AWS services. https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Best-Practice-Alarms.html.\nAWS CloudWatch Alarms: Benefits & Usage - AWS Fundamentals. https://blog.awsfundamentals.com/the-benefits-of-using-cloudwatch-alarms-in-your-aws-environment.\nSetting Up CloudWatch Alarms: A Step-by-Step Guide to AWS Monitoring: https://cloudpatterns.org/cloudwatch-alarms/."
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-RE-R-APCR",
+    "Description": "What method(s) do you use to relay the alarm notifications?",
+    "Level 1": "Alarms are displayed on dashboards. No alerts or notifications are sent through any channel",
+    "Level 2": "Alarms send notifications through pager, ticket, or email regardless of the severity level.",
+    "Level 3": "Alarms send notifications by pager, ticket, or email based on severity. High severity notification are sent through at least two channels, and continue to escalate until they are acknowledged.",
+    "Comments / Notes": "",
+    "References": "Alarm notifications can be relayed using several methods:\n\n1. AWS User Notifications: This service allows you to set up delivery channels to get notified about CloudWatch alarm state change and configuration change events. You can receive notifications for events through multiple channels, including email, AWS Chatbot chat notifications, or AWS Console Mobile Application push notifications.\n\n2. Amazon Simple Notification Service (SNS): SNS can be used to send both application-to-application (A2A) messaging and application-to-person (A2P) messaging, including mobile text messaging (SMS) and email messages. For every state that an alarm can take, you can configure the alarm to send a message to an SNS topic.\n\n3. Amazon EventBridge: EventBridge can be used to create a rule that triggers on a specific alarm in the ALARM state and invokes an AWS Lambda function. The Lambda function publishes a custom notification with the related log events.\n\nNotifying users on alarm changes - Amazon CloudWatch: https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/Notify_Users_Alarm_Changes.html.\nCreate custom CloudWatch alarm notifications using EventBridge: https://repost.aws/knowledge-center/eventbridge-custom-cloudwatch-alarm-notifications.\nHow to enable Amazon CloudWatch Alarms to send repeated notifications: https://aws.amazon.com/blogs/mt/how-to-enable-amazon-cloudwatch-alarms-to-send-repeated-notifications/.\nHow To Create an AWS Cloudwatch Alarm that Sends an Email: https://www.beabetterdev.com/2021/02/22/aws-cloudwatch-alarm-email/"
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-RE-R-APCR",
+    "Description": "Which alarms are you prepared to respond to?",
+    "Level 1": "Partial, ad-hoc coverage of alarms with incident response runbooks",
+    "Level 2": "Alarms are prioritized and the more critical are covered with incident response runbooks",
+    "Level 3": "All alarms mapped to a documented incident response runbook",
+    "Comments / Notes": "A mature customer will have a response plan in place for all alarms in place that do not have an automated response. Initially customers will have runbooks only for alarms (or playbooks worst case) and as they become more mature the runbooks will become automated with escalation such that if the automation cannot quiet the alarm then a human runbook is invoked.",
+    "References": ""
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-RE-R-APCR",
+    "Description": "How are you automating the response to alarms?",
+    "Level 1": "Manual response to alarms",
+    "Level 2": "Partial coverage: Some alarms are automated. A risk analysis defines which alarms should be automated",
+    "Level 3": "All alarms that can safely automate, implement automated incident response with escalation pathways if automation is insufficient.",
+    "Comments / Notes": "",
+    "References": "Automating the response to alarms in AWS can be achieved using several services and features:\n\n1. Amazon CloudWatch Alarms: You can set up CloudWatch alarms that trigger automated actions when certain thresholds are met.\n\n2. Amazon EventBridge: EventBridge can create a rule that triggers on a specific alarm state and invokes an AWS Lambda function. The Lambda function can then perform a custom action.\n\n3. AWS Systems Manager: Systems Manager can automate responses to alarms. For example, it can automatically run a series of actions in response to an incident.\n\n4. AWS Lambda: Lambda functions can be triggered by CloudWatch alarms to execute custom code and automate responses.\n\nHere are the steps to automate the response to alarms using EventBridge and Lambda:\n\n1. Create a Lambda Function: This function will implement the custom action that you want to perform when an alarm is triggered.\n\n2. Create a CloudWatch Alarm: In the CloudWatch console, you can create an alarm based on a specific metric and condition.\n\n3. Create an EventBridge Rule: In the EventBridge console, create a rule that triggers when the CloudWatch alarm changes state. Associate this rule with the Lambda function you created earlier.\n\nUse EventBridge to create CloudWatch alarm with custom responses https://repost.aws/knowledge-center/eventbridge-custom-cloudwatch-alarm-responses.\nAutomating Amazon CloudWatch Alarms with AWS Systems Manager. https://aws.amazon.com/blogs/mt/automating-amazon-cloudwatch-alarms-with-aws-systems-manager/.\nHow to automate incident response to security events with AWS Systems  https://aws.amazon.com/blogs/security/how-to-automate-incident-response-to-security-events-with-aws-systems-manager-incident-manager/."
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-LE-D-CMMS",
+    "Description": "How often are you reviewing the alarms for your application?",
+    "Level 1": "Alarms are added at the designing phase and tested when the application is implemented.",
+    "Level 2": "Alarms are updated reactively,  when an incident points to a failure in the triggering of the alarm.",
+    "Level 3": "Alarms are  proactively reviewed for improvements in effectiveness, and timing under normal operation. They are also reviewed  when a major change in the application or the environment occurs, and as part of resilience testing.",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "Observability",
+    "ADType": "OB-RE-R-APCD",
+    "Description": "Are dashboards aligned to distinct audiences?",
+    "Level 1": "A dashboard is maintained for internal teams showing all available information.",
+    "Level 2": "Dashboards are maintained for internal teams with information partitioned by purpose (diagnostic, overall health, operational monitoring).",
+    "Level 3": "Dashboards are maintained for internal teams, business users, and system clients.",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "Operations Management",
+    "ADType": "OR-LE-F-PEOC",
+    "Description": "Who attends the operations reviews ?",
+    "Level 1": "Attended by operations teams",
+    "Level 2": "Attended by operations teams and leadership",
+    "Level 3": "Operational reviews include participants from various application teams and areas beyond operations, including leadership teams",
+    "Comments / Notes": "Operation reviews are meetings where an application team analyzes the execution performance of the application against its goals and expectations. Operations reviews are an important part of managing software development work. Effective operation reviews have the right people present to discuss progress, issues, and next steps. The goal is to ensure everyone with relevant knowledge and responsibilities is able to contribute.",
+    "References": "Operations incident review meetings should be open to the entire engineering community in the company. This allows engineers across the organization to learn from the experiences of others, ask questions, and gain knowledge about the IT applications that run the business and the types of issues they can encounter. This knowledge can then be applied as they design, implement, and deploy other applications for the business.\nThe operations incident review meetings should cover topics such as reviewing outstanding action items from the previous week, high severity incidents and tickets, rollbacks or blocks in deployment pipelines, open customer support tickets, new runbook entries, detailed metrics dashboards for components, on-call rotation, and the ability to shift workloads across availability zones if needed.\nSource:\nhttps://docs.aws.amazon.com/wellarchitected/latest/operational-readiness-reviews/wa-operational-readiness-reviews.html\n\nhttps://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/resilience-lifecycle-framework/resilience-lifecycle-framework.pdf"
+  },
+  {
+    "Activity": "Operations Management",
+    "ADType": "OR-LE-F-CMMS",
+    "Description": "How frequently are operations reviews conducted?",
+    "Level 1": "Conducted in response to high severity incidents",
+    "Level 2": "Conducted quarterly",
+    "Level 3": "Conducted weekly",
+    "Comments / Notes": "",
+    "References": "Operational reviews are conducted to review recent feature releases, incidents, and operational metrics. It is suggests that operational reviews, which likely include reviewing incidents, are held on a regular basis. "
+  },
+  {
+    "Activity": "Operations Management",
+    "ADType": "OR-LE-F-RMSL",
+    "Description": "How thorough are the operations reviews?",
+    "Level 1": "Operation review includes incidents, releases that had rollbacks",
+    "Level 2": "Operation review includes incident including  steps being taken to prevent reoccurrence. Reviews continue until all actions are completed",
+    "Level 3": "Operation review includes recent feature releases, incidents, and operational metrics",
+    "Comments / Notes": "Effective Operations Reviews analyzes all relevant incidents,  and add lessons learned by application teams such as what indicators were valuable or what patterns proved valuable",
+    "References": ""
+  },
+  {
+    "Activity": "Operations Management",
+    "ADType": "OR-RE-R-RMSL",
+    "Description": "How does the team monitor their operational performance?",
+    "Level 1": "The team records their mean time to detect (MTTD), mean time to recover (MTTR), and mean time between failure (MTBF).",
+    "Level 2": "The team records MTBF, MTTR, MTTD, along with additional metrics such as failed deployments, successful deployments, mean time to diagnose, and mean time to mitigate.",
+    "Level 3": "The team compares their metrics against historical baseline performance, business-facing metrics such as support cases raised,  and features released to measure operations success.",
+    "Comments / Notes": "",
+    "References": "Some best practices for monitoring operational performance include: \n1. Define operations metrics that measure key performance indicators (KPIs) and goals for operational success. Establish baselines and regularly reevaluate the metrics. \n2. Collect and analyze operations metrics from different teams and systems to understand operational health. \n3. Create dashboards with business and technical viewpoints to provide visibility into operations status and trends. Have dashboards at different levels (top-level, application tiers, dependencies) to allow for in-depth inspection.\n4. Regularly review the operations metrics dashboards, looking for trends and anomalies that may indicate potential issues. Compare metrics to historical values. \n5. Perform retrospective analysis of operations metrics with cross-team participants to identify lessons learned and opportunities for improvement. 6. Engage stakeholders from business, development, and operations teams to validate findings from the analysis and share lessons learned.\n\nSource:\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/operational-excellence-pillar/wellarchitected-operational-excellence-pillar.pdf?did=wp_card&trk=wp_card\nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+  },
+  {
+    "Activity": "Operations Management",
+    "ADType": "OR-LE-F-PEOD",
+    "Description": "How does the team monitor operational burden on their resources?",
+    "Level 1": "Anecdotal data is collected about whether team resources have sufficient capacity to maintain the application.",
+    "Level 2": "Data is collected to understand human error rate such as minutes of rework per-month.",
+    "Level 3": "Resources are interviewed to understand external factors that may affect their ability to perform their responsibilities.",
+    "Comments / Notes": "",
+    "References": "To measure the operational workload on teams, you should: \n1. Define workload metrics that reflect the tasks and responsibilities of the operations teams. These metrics should align with the overall business goals and service level targets. \n2. Collect and analyze data on these metrics to understand the current workload and identify any issues or areas for improvement. This could include metrics like incident response times, number of incidents handled, time spent on different tasks, etc.\n3. Establish baselines for the metrics to determine what constitutes normal operational workload versus overloaded or underutilized teams. \n4. Monitor the metrics over time and set up alerts when workload deviates from the expected baselines, indicating potential issues that need to be addressed. \n5. Validate that the metrics accurately reflect the operational health and effectiveness of the teams in achieving business outcomes. Adjust the metrics as needed based on feedback and changing needs.\n\nSources:\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/operational-excellence-pillar/wellarchitected-operational-excellence-pillar.pdf?did=wp_card&trk=wp_card\nhttps://docs.aws.amazon.com/wellarchitected/2023-10-03/framework/ops_org_culture_team_res_appro.html"
+  },
+  {
+    "Activity": "Resilience Requirements",
+    "ADType": "RR-RE-R-RMSD",
+    "Description": "How are the recovery objectives defined for the application? (Objectives including but not limited to: Recovery Point Objective (RPO), Recovery Time Objective (RTO), Mean Time To Restore (MTTR))",
+    "Level 1": "Tier-based. \nUsing a tier-based system the organization defines categories, or tiers, each with its own requirements. An application is assigned a tier and must meet its requirements.\n(Example: A tier 1 application has a recovery time objective (RTO) of 1 hour, a recovery point objective (RPO) of 15 minutes, and a mean time to recovery (MTTR) of 30 minutes.)",
+    "Level 2": "Application-based. \nThe resilience objectives are set for each application. While they may be guided by tier-based categories, the requirements are tailored to the specific context of the application.\n(Example: the customer management system has an RTO of 15 minutes, RPO of 5 minutes, and a MTTR of 10 minutes.)",
+    "Level 3": "User journey-based. \nThe application has identified user journeys, paths, or client-facing functions, each with their own resilience requirements. Some journeys are more improtant to the business than others.\n(Example: For the e-commerce platform the checkout process has an RTO of 30 mins, an RPO of 5 min, and a MTTR of 20 mins while the product search process has an RTO of 4 hours, RPO of 2 hours, and a MTTR of 3 hours.)",
+    "Comments / Notes": "",
+    "References": "To define recovery objectives for applications, you need to determine the Recovery Time Objective (RTO) and Recovery Point Objective (RPO) for each application based on business impact analysis and risk assessment. The RTO and RPO values should be based on factors like service level agreements, compliance requirements, and business criticality of the application. For mission-critical applications, common standards are an RTO of 15 minutes and a near-zero RPO. These recovery objectives guide the selection and implementation of an appropriate disaster recovery strategy for the application.\nConsider:\n\n1. RTO and RPO:\nRTO defines the maximum acceptable time for the application to recover and resume normal operations after a disruption.\nRPO defines the maximum acceptable amount of data loss that can be tolerated during a disruption.\nYou can set these objectives in AWS Resilience Hub using a resiliency policy, which will tell you whether you're meeting these objectives or not.\n\n2 . Resiliency Score:\nAWS Resilience Hub provides a resiliency score that represents how resilient an application is to potential disruptions.\nThe score is calculated based on how closely the application follows recommendations for meeting its resiliency policy, including setting up alarms, standard operating procedures (SOPs), and tests.\nThe maximum resiliency score is 100 points, and regular assessments can help track score changes as the resiliency posture improves.\nThe resiliency score provides a way to quantify the application's resilience and prioritize further optimizations.\n\n3. Business-Oriented Focus:\nDefining resilience objectives should start with a business-oriented focus to understand the application's expected delivery and the consequences of impairment.\nThis understanding of business objectives then cascades to areas such as architecture, engineering, and operations.\nThe resilience objectives might be applied to all applications, but the way the objectives are measured often varies depending on the function of the application.\n\n4. Decomposing Workloads:\nIt's common to initially think of a workload's availability as a single target for the workload as a whole.\nHowever, upon closer inspection, you may find that certain functions of a workload have different availability requirements.\nDecomposing a workload into constituent parts-per-function and evaluating the availability requirements for each can help focus efforts on availability according to the specific needs and value delivered by the individual function.\n\n[1] Set objectives - AWS Prescriptive Guidance  https://docs.aws.amazon.com/prescriptive-guidance/latest/resilience-lifecycle-framework/stage-1.html\n[2] Six ways to make it easier to know your apps are resilient:  https://community.aws/content/2iClTG0Bm73DmI9W4sVz4S8sMYz/six-ways-to-know-your-apps-are-resilient\n[3] Recovery objectives: https://docs.aws.amazon.com/whitepapers/latest/disaster-recovery-of-on-premises-applications-to-aws/recovery-objectives.html \n[4] Track application resiliency in public sector organizations using AWS Resilience Hub: https://aws.amazon.com/blogs/publicsector/track-application-resiliency-in-public-sector-organizations-using-aws-resilience-hub/\n[5] How are your business and regulatory requirements driving the resilience of your workload: https://docs.aws.amazon.com/wellarchitected/latest/financial-services-industry-lens/fsirel03.html \n[6] Disaster Recovery of Workloads on AWS, Recovery in the Cloud: https://docs.aws.amazon.com/pdfs/whitepapers/latest/disaster-recovery-workloads-on-aws/disaster-recovery-workloads-on-aws.pdf"
+  },
+  {
+    "Activity": "Resilience Requirements",
+    "ADType": "RR-MO-F-RMSD",
+    "Description": "How are the SLO (uptime, latencies) defined for the application?",
+    "Level 1": "Tier-based. \nThe organization establishes categories / tiers, each with its own set of requirements. An application is assigned to a tier and should meet the corresponding requirements. \n(For instance, an application in Tier 1 is expected to have 99.9% availability.)\n",
+    "Level 2": "Application-based. \nThe resilience objectives are defined at an application level. While they may be guided by a tier-based system, they are adapted to the application specific context.\n(For example, the e-commerce application is expected to maintain 99.95% availability.)",
+    "Level 3": "User journey-based. \nThe application identifies various user paths, journeys, or client-facing functions, each with its own resilience requirements. It recognizes that some paths are more crucial to the business than others within the same application.\n(For instance, in an e-commerce application the checkout process should load in less than 5 seconds for 99% of users, while the support request submission should respond in less than 30 seconds for 90% of users).",
+    "Comments / Notes": "",
+    "References": "To define service level objectives (SLOs) for application uptime and latency, you should: \n1. Determine the RTO and RPO for your application based on business impact analysis and risk assessment. RTO is the maximum acceptable downtime, and RPO is the maximum acceptable data loss. \n2. Based on the RTO and RPO, define the required uptime percentage and maximum allowable latency for your application. For example, for a mission-critical application, you may set an uptime SLO of 99.99% and a latency SLO of <100ms.\n3. Consider factors like service dependencies, fault tolerance mechanisms, scaling patterns, and data consistency requirements when defining the SLOs to ensure they are achievable with your application architecture. \n4. Regularly review and adjust the SLOs based on actual performance data, evolving business needs, and sustainability goals of your organization. You may be able to reduce resource usage by slightly relaxing SLOs in exchange for acceptable decreases in service levels.\n\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/framework/wellarchitected-framework.pdf\n\nhttps://docs.aws.amazon.com/pdfs/whitepapers/latest/disaster-recovery-of-on-premises-applications-to-aws/disaster-recovery-of-on-premises-applications-to-aws.pdf"
+  },
+  {
+    "Activity": "Resilience Requirements",
+    "ADType": "RR-RE-F-RMSD",
+    "Description": "How is the criticality of the application determined or measured?",
+    "Level 1": "Criticality is determined through consensus by committee of key stakeholders. ",
+    "Level 2": "Documented criteria are used to establish criticality.",
+    "Level 3": "The criticality of an application is assessed based on its business value. The impact of its unavailability is measured in quantifiable terms, such as potential financial loss over a given time period.",
+    "Comments / Notes": "",
+    "References": "To determine application criticality, you should consider the following key factors: \n1. The maximum time the application can be down before severe business impact is incurred. This involves determining the monetary cost or direct financial impact to the business per unit of time if the application is disrupted. \n2. The level of risk exposed if the application is unavailable. Applications that are mission-critical or support core business functions should be classified as highly critical. \nAdditionally, you can assess application criticality by asking questions like: - Is the application strategic and requires rapid innovation and feature additions? - Does the application have high infrastructure costs or licensing fees? - Does the application perform the same function as other applications, presenting an opportunity for consolidation? - Is the application experiencing functionality sprawl that may require re-architecting?\n\nhttps://docs.aws.amazon.com/pdfs/whitepapers/latest/aws-caf-governance-perspective/aws-caf-governance-perspective.pdf\n\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/framework/wellarchitected-framework.pdf"
+  },
+  {
+    "Activity": "Resilience Requirements",
+    "ADType": "RR-RE-F-CMMD",
+    "Description": "How often are reviewed the resilience objectives and criticality (objectives: RTO, RPO, MTTR -  criticality: Tier 1, 2, 3) for the application?",
+    "Level 1": "Periodically, fixed time.",
+    "Level 2": "Reviewed when major changes are made",
+    "Level 3": "Reviewed when there is a change in the environment such as a change to business strategy, change in usage levels, or when a disruption occurs.",
+    "Comments / Notes": "",
+    "References": "The frequency of reviewing application resilience objectives and criticality levels should be based on factors such as: - Importance of the application to the organization (revenue, brand impact, etc.) - Total cost of running the application - Complexity of the application - Ease of implementing changes - Software licensing agreements and potential cost increases from changes The review frequency can vary for the overall application and its different components. \nFor example, you may review the full application every 18 months, web servers every 6 months, databases every 12 months, compute/short-term storage every 6 months, and long-term storage every 12 months. It's important to allocate dedicated time and resources for continuous improvement activities, including reviewing and optimizing resilience objectives based on the factors mentioned above. The review process should validate current objectives, identify potential improvements, prioritize them, and incorporate them into your backlog for implementation.\n\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/framework/wellarchitected-framework.pdf"
+  },
+  {
+    "Activity": "Resilience Requirements",
+    "ADType": "RR-AN-F-RMSS",
+    "Description": "How do you ensure that findings from Resilience learnings (tests and incidents) that are critical to the business are prioritized over new features? ",
+    "Level 1": "Resilience findings are not prioritized\n over new features",
+    "Level 2": "Resilience findings have a higher priority,  but have the tendency of getting re-prioritzed from the business in favor of new features",
+    "Level 3": "Resilience findings that may impact the \nbusiness are prioritized tracked \nand remediated",
+    "Comments / Notes": "",
+    "References": "Resilience should be a key consideration from the beginning, rather than an afterthought once new features are developed. To prioritize resilience learnings, it is recommended to integrate resilience testing like disaster recovery and chaos engineering into the continuous integration and deployment processes. This helps identify unknown issues and weaknesses in the system that could lead to failures. The learnings from these tests should be documented and used to build runbooks for efficient mitigation of failures. By making resilience testing a core part of the development lifecycle, resilience improvements can take precedence over new features when necessary.\n\nhttps://docs.aws.amazon.com/pdfs/wellarchitected/latest/framework/wellarchitected-framework.pdf"
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "CE-AN-F-RMSL",
+    "Description": "How closely does the load utilized during experiments mirror the traffic in a production environment?",
+    "Level 1": "Chaos experiments are performed using manual traffic generation",
+    "Level 2": "Chaos experiments are conducted by generating traffic through scripts",
+    "Level 3": "Chaos experiments are conducted using real-time production traffic.",
+    "Comments / Notes": "",
+    "References": "Load testing should use traffic patterns that are representative of what you receive in production. The load tests should aim to simulate the mix of requests and traffic volumes that are seen in the actual production environment. This allows you to accurately identify bottlenecks and determine the capacity required to handle the production workload.\nWhen running experiments or load tests in production environments, it is recommended to do so during off-peak hours when there is lower customer usage. This mitigates the potential impact on actual users while still allowing you to test against the production infrastructure and configuration. Additionally, you should have monitoring and guardrails in place to stop the experiment if it exceeds defined thresholds that could negatively impact the production system.\n\nSource:\nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "CE-AN-F-RMSL",
+    "Description": "How realistic, detailed, and relevant are the conditions used in the chaos experiments?",
+    "Level 1": "Basic: Utilizing generic scenarios supplied by others, which may not specifically address the actual application. For instance, employing wide-ranging failure categories provided by the organization without considering the application's architecture.",
+    "Level 2": "Intermediate: Scenarios based on historical events. These can be more realistic and customized to the application. For instance, replicating previous database errors that are specific to the application’s database schema and usage patterns.",
+    "Level 3": "Advanced: Scenarios developed by the application team. These are the most customized, accurately reproducing past incidents. For instance, replaying a recorded network partition that matches production logs down to the values of variables",
+    "Comments / Notes": "Highly targeted, authentic experiments helps to increase the resilience posture by testing real scenarios of impairments. An intermediate step could start by enhancing generic scenarios with application-specific details. Over time, leveraging production data to design realistic experiments focusing precisely on past weaknesses will strengthen resilience best. Consistent experimentation aids learning.",
+    "References": "To make chaos experiments realistic and relevant to production conditions: \n1. Run experiments under real-world load using canary deployments that spin up both a control and experimental system deployment, where feasible. If using actual customer traffic poses too much risk, you can run experiments using synthetic traffic on production infrastructure against the control and experimental deployments. \n2. Run experiments during off-peak times when first experimenting in production to mitigate potential impact. \n3. Establish and monitor guardrails to ensure the experiment does not impact production traffic or other systems beyond acceptable limits. Set stop conditions to stop an experiment if it reaches a threshold on a guardrail metric that you define.\n 4. Use past post-incident analyses when determining which faults to experiment with, so the experiments simulate real-world failures your system has faced or may face. \n5. Run chaos experiments both as part of your CI/CD pipeline as well as outside of deployments to continually verify resilience. 6. If your pre-production environments are not close enough to production conditions, run experiments directly on production infrastructure when possible, with proper guardrails and controls in place.\nSource: \nREL12-BP05\nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "CE-AN-F-RMSL",
+    "Description": "In which environment(s) are you running your chaos experiments?",
+    "Level 1": "Chaos experiments are performed in a test environment",
+    "Level 2": "Chaos experiments that prove successful in test environments are transformed into automated regression tests prior to being deployed into the production environment",
+    "Level 3": "Chaos experiments that prove successful in test environments are performed in a production environment",
+    "Comments / Notes": "Chaos experiment lifecycle starts with execution in a test environment, then converted to regression tests, and finally consistently performed in production.",
+    "References": "Chaos engineering experiments should be conducted in a non-production environment first before running them in production. This allows you to test the resilience of your workloads in a controlled environment with minimal impact to customers. AWS recommends starting your chaos engineering efforts in a non-production environment.\nOnce you have validated the resilience of your workloads in a non-production environment, you can then run chaos experiments as part of your CI/CD pipeline and also outside of deployments in production. Running chaos experiments continually as part of your CI/CD pipeline allows you to maintain them as automated regression tests to ensure your workloads can withstand failures over time.\nSource:\nhttps://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/resilience-lifecycle-framework/resilience-lifecycle-framework.pdf \nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "CE-AN-F-RMSL",
+    "Description": "How repeatable are your chaos experiments?",
+    "Level 1": "The procedures for simulating chaos experiments are documented.",
+    "Level 2": "Chaos experiment simulation steps are scripted",
+    "Level 3": "The procedures for simulating chaos experiments are codified within a chaos engineering framework",
+    "Comments / Notes": "When Chaos experiments and the conditions under which they are performed are repeatable, they can be automated and re-used by other teams.",
+    "References": "To make chaos experiments repeatable, you should: \n1. Treat your chaos experiments as code and maintain them through the development cycle. This allows you to version control the experiments and run them consistently. \n2. Run chaos experiments as part of your CI/CD pipeline, so they are executed automatically with each new deployment. This ensures the experiments are run regularly and consistently.\n3. Automate the chaos experiments using an established service like AWS Fault Injection Simulator (AWS FIS) instead of custom scripts. AWS FIS allows you to define experiments with clear scopes, safety mechanisms, rollbacks, and logging to support controlled execution. \n4. Maintain chaos experiments that validate your workload's resilience as automated regression tests. If a chaos experiment shows your workload can withstand a particular failure, keep running that experiment regularly to ensure resilience is maintained.\n\nSource: \nREL12-BP05\nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "CE-AN-F-RMSL",
+    "Description": "How frequently are chaos experiments performed?",
+    "Level 1": "Chaos experiments are performed as part of initial system release",
+    "Level 2": "Chaos experiments are performed periodically (fixed interval)",
+    "Level 3": "Chaos experiments are conducted with each significant feature rollout, whenever there are substantial chnages to the environment, and routinely as an integral aspect of the Software Development Life Cycle (SDLC).",
+    "Comments / Notes": "",
+    "References": "Chaos experiments should be run regularly as part of your continuous integration and continuous deployment (CI/CD) pipeline. After an initial experiment validates that your workload can withstand a particular type of failure, that experiment should be automated to run continually as a regression test with each new deployment.\nIn addition to running chaos experiments as part of your CI/CD pipeline, you should also conduct them periodically outside of deployments, such as during \"game days\" where you simulate failures or events to verify your systems, processes, and team responses. Running chaos experiments regularly allows you to continually test and improve the resilience of your workloads.\n\nSource: \nREL12-BP05, REL12-BP06\nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "CE-AN-R-RMSL",
+    "Description": "How are you testing your fault isolation boundaries?",
+    "Level 1": "Manually failing individual components.",
+    "Level 2": "Manually failing all components of the Fault Isolation Boundary.",
+    "Level 3": "Automated failure of any Fault Isolation Boundary, at random times.",
+    "Comments / Notes": "",
+    "References": "To automate testing fault isolation boundaries in chaos experiments, you should run the chaos experiments regularly as part of your CI/CD pipeline. After verifying that a workload meets the experiment's hypothesis, the experiment should be automated to run continually as a regression test in your CI/CD pipeline. This allows you to regularly test the fault isolation boundaries and resiliency of your workload.\nWhen conducting chaos experiments, it is important to minimize the scope and potential impact of the experiment. One recommended approach is to first perform the experiment in a non-production environment to verify that thresholds for stop conditions activate as expected and observability is in place to catch any exceptions, before running the experiment directly in production.\nWhen running fault injection experiments, you should verify that all responsible parties like operations teams, service reliability teams, and customer support are well-informed about when the experiments will run and what to expect. Provide these teams with communication tools to inform those running the experiment if they observe any adverse effects. After the experiment, you must restore the workload and its underlying systems back to their original known-good state.\n\nSource: \nREL12-BP05, REL12-BP06\nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "CE-AN-F-RMSL",
+    "Description": "What types of tests are you conducting to evaluate your application’s resilience against impacts to components or downstream dependencies?",
+    "Level 1": "Chaos experiments are conducted to validate the system’s response when a component or dependency is inaccessible or unavailable.",
+    "Level 2": "Chaos experiments are conducted to validate the system’s reaction when components or dependencies are partially inaccessible or unavailable.",
+    "Level 3": "Chaos experiments are conducted to validate the system’s reaction to multiple concurrent events, such as an increased load during periods of partial availability.",
+    "Comments / Notes": "",
+    "References": "Some types of chaos experiments to test application resilience against component failures and downstream dependency failures include: \n- Simulating service failures by terminating instances or containers running parts of the application.\n- Simulating region outages by failing over to another region - Simulating single node failures by terminating a node in a cluster.\n- Simulating network outages by injecting network faults \n- Simulating complete failovers of connected systems like databases or message queues \nChaos engineering tools like AWS Fault Injection Service and AWS Resilience Hub can assist in conducting these types of experiments in a controlled manner. \nIt's recommended to embed the use of these tools into automated pipelines to run fault injection tests after deployments to validate the resilience of new changes. \n\nSource: \nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "CE-LE-F-RMSL",
+    "Description": "Is a catalog of experiments maintained?",
+    "Level 1": "Experiment catalog exists.",
+    "Level 2": "Experiment catalog exists and is maintained.",
+    "Level 3": "The experiment catalog incorporates a contribution procedure for obtaining experiments from various teams.",
+    "Comments / Notes": "",
+    "References": "Maintaining a catalog of chaos experiments is an important part of chaos engineering. The search results recommend treating chaos experiments as code and maintaining them through the development cycle. Specifically, if a chaos experiment shows that the system can withstand a particular disruption, that experiment should be automated and maintained as a regression test as part of your CI/CD pipeline.\nAutomating and regularly running chaos experiments as part of your CI/CD pipeline helps ensure the continued resilience of your workloads over time. It allows you to verify that new changes have not introduced regressions that make the system less resilient. The search results suggest using a framework or toolset like AWS Fault Injection Service (AWS FIS) that can track experiment state, emit logs, and provide rollback mechanisms to safely run chaos experiments.\n\nSource: \nREL12-BP05, REL12-BP06\nhttps://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html"
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "CE-AN-F-PEOD",
+    "Description": "What guidance do you offer your application teams to get started with chaos engineering?",
+    "Level 1": "Each application team independently acquire knowledge of the tools, processes, and experiment design procedures prior to conducting their chaos experiments.",
+    "Level 2": "Support is available to application teams to assist them in comprehending the process of conducting a chaos experiment.",
+    "Level 3": "The organization provides expertise to guide application teams in performing their first chaos experiment.",
+    "Comments / Notes": "",
+    "References": "Organizations can offer the following guidance to their teams to get started with chaos engineering: \n1. Start chaos engineering efforts in a non-production environment first. Use services like AWS Fault Injection Service (AWS FIS) to run chaos engineering experiments with various faults in a controlled environment. \n2. Understand the normal operating conditions or steady state of the application before formulating a hypothesis on how the application should behave when disruptions are injected. \n3. Treat chaos experiments as code and maintain them through the development cycle. Run chaos experiments as part of the CI/CD pipeline as well as outside of deployments. \n4. Use past post-incident analyses to determine which real-world faults to experiment with, such as loss of EC2 instances, failover of primary RDS database, or disruptions in an Availability Zone. \n5. Ensure that chaos experiments are performed as part of the systems development lifecycle (SDLC) to continually build confidence in the system's ability to withstand turbulent conditions in production.\n\nSource:\nhttps://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/resilience-lifecycle-framework/resilience-lifecycle-framework.pdf "
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "CE-AN-F-PEOD",
+    "Description": "How is the team able to demonstrate the business value of their experiments?",
+    "Level 1": "The organization provides expertise to verify the relevance and business value of an experiment.",
+    "Level 2": "The application owner translates the experiment's business value.",
+    "Level 3": "The application team document the business value of the experiment as part of the experiment, as a function of the steady state.",
+    "Comments / Notes": "",
+    "References": "(Mau) I think this is a more general question to ask about all controls (not only about chaos tests). I added the general question in the Resilience_Requirement tabs (see question \"Resilience Controls Selection\") "
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "CE-MO-C-APCD",
+    "Description": "How do you implement monitoring during experiments to maximize the knowledge gained from the experiment?",
+    "Level 1": "Steady state is monitored and standard system data is collected.",
+    "Level 2": "Steady state is monitored, DEBUG is enabled in logging.",
+    "Level 3": "Steady state is monitored with tracing and user experience enabled.",
+    "Comments / Notes": "",
+    "References": "\"To monitor chaos engineering experiments, it is recommended to use a framework or toolset that can track the current state of an experiment, emit logs, and provide rollback mechanisms. This allows you to run experiments in a controlled manner, understand the impact, and roll back if unexpected turbulence occurs. AWS Fault Injection Service (AWS FIS) is an established service that provides these capabilities for running chaos experiments on AWS workloads.\nAdditionally, chaos engineering experiments should be run continually as part of your CI/CD pipeline to validate the resilience of your workloads after each deployment. The experiments can be automated to run as regression tests, allowing you to monitor the results and ensure your workloads can withstand disruptions over time.\n\nSource: \nREL12-BP05 https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html\""
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "CE-AN-F-RMSL",
+    "Description": "How are experiments integrated into the Software Development LifeCycle (SDLC) of the application?",
+    "Level 1": "Automated regression tests are non-blocking in the release cycle.",
+    "Level 2": "Automated regression tests serve as gating checks in the release cycle.",
+    "Level 3": "Automated regression tests act as gating checks, based on the severity of the impact to the steady state during the test",
+    "Comments / Notes": "",
+    "References": "To integrate chaos engineering experiments into the software development lifecycle, you should: \n1. Treat chaos experiments as code and maintain them through the development cycle. Chaos experiments should be automated and run as part of your CI/CD pipeline as regression tests. \n2. Run chaos experiments both as part of your CI/CD pipeline and outside of deployments, such as during game days or other scheduled testing periods. \n3. Use insights from past incidents and post-incident analyses to determine which faults to experiment with in your chaos engineering tests. \nBy integrating chaos engineering into the software development lifecycle, you can continually verify the resilience of your workloads to real-world disruptions in a controlled way. This allows you to learn from faults, observe and measure resilience, validate monitoring and alerting, and improve the overall reliability of your applications. \n\nSource: \nhttps://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/resilience-lifecycle-framework/resilience-lifecycle-framework.pdf"
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "CE-LE-C-RMSL",
+    "Description": "How does the organization learn from the experiments carried out by individual application teams?",
+    "Level 1": "A postmortem is conducted at the end of the chaos experiment to evaluate the system’s behaviors and incorporate any remedial tasks into the team’s backlog.",
+    "Level 2": "The outcomes of experiments are captured in a standard format and maintained in a centralized catalog. These results are reviewed by a central team to identify trends and patterns across teams.",
+    "Level 3": "The postmortem is conducted following the same procedure and report structure as incident management. Teams have access to the library of reports and discussions, enabling them to learn from the experiments of others",
+    "Comments / Notes": "",
+    "References": "\"To integrate chaos engineering experiments into the software development lifecycle, you should: \n1. Treat chaos experiments as code and maintain them through the development cycle. Chaos experiments should be automated and run as part of your CI/CD pipeline as regression tests. \n2. Run chaos experiments both as part of your CI/CD pipeline and outside of deployments, such as during game days or other scheduled testing periods. \n3. Use insights from past incidents and post-incident analyses to determine which faults to experiment with in your chaos engineering tests.\nBy integrating chaos engineering into the software development lifecycle, you can continually verify the resilience of your workloads to real-world disruptions in a controlled way. This allows you to learn from faults, observe and measure resilience, validate monitoring and alerting, and improve the overall reliability of your applications.\n\nSource:\nREL12-BP05 https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/welcome.html\nhttps://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/resilience-lifecycle-framework/resilience-lifecycle-framework.pdf\""
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "GD-AN-R-RMSL",
+    "Description": "How closely do your Game Days simulate the actual environment?",
+    "Level 1": "Game days are conducted as table-top exercises",
+    "Level 2": "Game days are conducted as live exercises in a test environment",
+    "Level 3": "Game days are conducted as live exercises in the production environment",
+    "Comments / Notes": "",
+    "References": "To ensure that your Game Days are as close to the real production environment as possible, consider the following:\n1. Replicate the production environment:\n   - Ensure that the Game Day environment closely matches the production environment in terms of infrastructure, configurations, and dependencies.\n   - Use the same or similar AWS services, versions, and configurations as in production.\n   - Replicate the data volumes, traffic patterns, and user behavior as closely as possible.\n2. Involve the entire team:\n   - Conduct the Game Day as an \"all hands on deck\" activity, with participation from engineers, operations, and business decision-makers.\n   - Ensure that everyone is informed about the timing and the scope of the Game Day.\n   - Provide clear runbooks and procedures for the team to follow during the simulated events.\n3. Simulate realistic failure scenarios:\n   - During the Game Day, introduce simulated failure events, such as service outages, network disruptions, or infrastructure failures, that are likely to occur in the production environment.\n   - Assess the team's ability to detect, diagnose, and remediate these issues using the established runbooks and procedures.\n4. Measure the impact and validate the resilience:\n   - Closely monitor the impact of the simulated events on the application's availability, performance, and data integrity.\n   - Validate that the self-healing mechanisms and the team's response procedures are effective in mitigating the impact and restoring normal operations.\n   - If any negative impact is observed, roll back the test and address the identified issues before the next Game Day.\n5. Continuously improve and iterate:\n   - Conduct regular Game Days, at least annually, to ensure that the resilience of the system is maintained and improved over time.\n   - Gather feedback from the team and incorporate lessons learned into the runbooks and procedures.\n   - Continuously review and update the Game Day scenarios to reflect changes in the production environment and emerging threats.\n\nSource:\nREL12-BP06 Conduct game days regularly - Reliability Pillar] (https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html)"
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "GD-AN-R-RMSL",
+    "Description": "How close to real events are the events used for Game Days?",
+    "Level 1": "Game days are performed using manual traffic generation",
+    "Level 2": "Game days are performed using scripted traffic generation",
+    "Level 3": "Game days are performed using live traffic",
+    "Comments / Notes": "",
+    "References": ""
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "GD-AN-C-RMSL",
+    "Description": "How realistic are the scenarios for Game days?",
+    "Level 1": "Game days are performed using organization-selected scenarios",
+    "Level 2": "Game days are performed using historical scenarios",
+    "Level 3": "Game days are performed using application-team developed scenarios",
+    "Comments / Notes": "",
+    "References": "To make chaos engineering game day scenarios realistic, you should: \n1. Inject real-world faults and disruptions that could occur in production, such as network latency, server failures, hard drive errors, and impairment of external dependencies. This allows you to test how your system responds to actual failure conditions. \n2. Run the experiments during periods of normal or expected load, rather than low traffic times. This ensures you are testing your system's resilience under realistic operating conditions.\n3. Base your chaos experiments on learnings from past incidents and post-incident analyses. This helps identify the most relevant failure modes to test against. \n4. Treat your chaos experiments like code - maintain them through the development cycle and run them as part of your CI/CD pipeline as well as outside of deployments. This ensures chaos engineering is an ongoing practice integrated into your processes.\n\nSource:\nhttps://docs.aws.amazon.com/pdfs/prescriptive-guidance/latest/resilience-lifecycle-framework/resilience-lifecycle-framework.pdf "
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "GD-AN-C-RMSL",
+    "Description": "How reproducible are the Game Days?",
+    "Level 1": "Game day scenarios are documented",
+    "Level 2": "Game day scenarios are scripted",
+    "Level 3": "Game day scenarios are scripted and shared via central library",
+    "Comments / Notes": "",
+    "References": "To make the Game Days reproducible, consider the following:\n1. Standardize the Game Day process:\n   - Develop a well-documented and repeatable process for conducting Game Days, including the steps to set up the test environment, introduce failures, and validate the team's response.\n   - Maintain a library of pre-defined failure scenarios and runbooks that can be consistently applied across different Game Days.\n2. Automate the setup and teardown:\n   - Use infrastructure as code (IaC) tools, such as AWS CloudFormation or Terraform, to provision the Game Day environment in a consistent and repeatable manner.\n   - Automate the process of introducing failures and validating the team's response to ensure consistency across different Game Days.\n3. Maintain a controlled test environment:\n   - Ensure that the Game Day environment is isolated from the production environment to avoid any unintended impact on live systems.\n   - Implement measures to quickly roll back the test environment to a known good state after each Game Day.\n4. Capture and analyze the results:\n   - Collect detailed logs and metrics during the Game Day to understand the team's response and the impact of the simulated failures.\n   - Analyze the results to identify areas for improvement and incorporate the lessons learned into the next iteration of the Game Day.\n5. Involve the same team members:\n   - Ensure that the same core team members participate in the Game Days to build their experience and familiarity with the process.\n   - Provide training and support to new team members to ensure they can seamlessly integrate into the Game Day activities.\n6. Conduct regular reviews and updates:\n   - Regularly review the Game Day process and scenarios to ensure they remain relevant and aligned with the evolving production environment.\n   - Incorporate feedback from the team and update the process and scenarios as necessary to maintain their effectiveness.\nSources\n[1] [REL12-BP06 Conduct game days regularly - Reliability Pillar] (https://docs.aws.amazon.com/wellarchitected/latest/reliability-pillar/rel_testing_resiliency_game_days_resiliency.html)"
+  },
+  {
+    "Activity": "Resilience Testing",
+    "ADType": "GD-AN-R-RMSL",
+    "Description": "How frequently are game days performed?",
+    "Level 1": "Game days are conducted upon initial system release",
+    "Level 2": "Game days are performed on a periodic basis.",
+    "Level 3": "Game days are performed regularly as part of training, system testing (when major changes to the application or to the environment).",
+    "Comments / Notes": "",
+    "References": ""
+  }
+]
